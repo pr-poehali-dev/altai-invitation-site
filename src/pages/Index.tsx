@@ -168,9 +168,7 @@ export default function Index() {
                 letterSpacing:'0.04em',
                 marginTop:4,
                 fontStyle:'italic',
-              }}>
-                Јӱректерди Алтай јараштырат
-              </p>
+              }}></p>
             </div>
 
             {/* Низ — пульсирующая стрелка */}
