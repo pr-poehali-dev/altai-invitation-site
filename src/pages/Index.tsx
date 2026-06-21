@@ -3,7 +3,7 @@ import Icon from '@/components/ui/icon';
 import Countdown from '@/components/Countdown';
 
 const IMG_BG     = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/3a740bed-d15c-41bd-9431-d4b0194b61e2.jpg';
-const IMG_COUPLE = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/47b96426-c610-4297-833d-dbbec2f22a11.jpg';
+const IMG_COUPLE = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/bucket/de814e19-38b7-4eff-892f-ed8df174d9cf.jpg';
 const IMG_VALLEY = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/7830eb8e-bcf1-4e78-ab94-1d20ffdea6c6.jpg';
 
 /* ── Цвета ── */
@@ -247,9 +247,14 @@ export default function Index() {
       {/* ══ СЛАЙД 3: Пара ══ */}
       <section className="relative w-full h-screen overflow-hidden flex items-end justify-center">
         <img src={IMG_COUPLE} alt=""
-             className="absolute inset-0 w-full h-full object-cover animate-pan"/>
-        <div className="absolute inset-0"
-             style={{background:'linear-gradient(to top, rgba(245,238,225,0.95) 0%, rgba(245,238,225,0.1) 50%, transparent 100%)'}}/>
+             className="absolute inset-0 w-full h-full object-cover"
+             style={{objectPosition:'center top'}}/>
+        {/* Плавный переход сверху — растворяется в кремовый */}
+        <div className="absolute top-0 left-0 right-0 h-32"
+             style={{background:'linear-gradient(to bottom, hsl(40,50%,96%) 0%, transparent 100%)'}}/>
+        {/* Плавный переход снизу */}
+        <div className="absolute bottom-0 left-0 right-0"
+             style={{height:'52%', background:'linear-gradient(to top, hsl(40,50%,96%) 0%, hsl(40,50%,96%) 18%, rgba(245,240,230,0.82) 50%, transparent 100%)'}}/>
         <Side/><Side flip/>
         <div className="relative z-10 text-center pb-14 px-10 w-full flex flex-col items-center">
           <Medallion size={42}/>
