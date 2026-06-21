@@ -87,21 +87,146 @@ const Index = () => {
       {!opened && (
         <section
           onClick={() => setOpened(true)}
-          className="fixed inset-0 z-50 cursor-pointer overflow-hidden"
-          style={{ background: 'hsl(42,35%,90%)' }}
+          className="fixed inset-0 z-50 cursor-pointer overflow-hidden flex flex-col"
+          style={{ background: 'linear-gradient(180deg, hsl(44,40%,93%) 0%, hsl(40,35%,86%) 60%, hsl(38,32%,80%) 100%)' }}
         >
-          <img
-            src={IMG_SLIDE1}
-            alt=""
-            className="absolute inset-0 w-full h-full object-contain object-center"
-          />
-          {/* Только подпись снизу */}
-          <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-1 animate-float z-10">
-            <p className="text-[11px] uppercase tracking-widest text-[hsl(30,25%,28%)]/70"
-               style={{ fontFamily: "'Oswald', sans-serif" }}>
-              Экранга тийип ачыгар
-            </p>
-            <Icon name="ChevronDown" size={18} className="text-[hsl(36,42%,42%)]" />
+          {/* ── Угловые плетёные орнаменты ── */}
+          {/* Верх-лево */}
+          <svg viewBox="0 0 90 90" className="absolute top-0 left-0 w-24 h-24 text-[hsl(30,35%,38%)]" fill="currentColor">
+            <path d="M0,0 L90,0 L90,12 L12,12 L12,90 L0,90 Z" fillOpacity="0.18"/>
+            <path d="M0,0 L24,0 L24,4 L4,4 L4,24 L0,24 Z" fillOpacity="0.5"/>
+            <rect x="6" y="6" width="14" height="14" rx="1" fillOpacity="0.12"/>
+            <path d="M14,2 L22,10 L14,18 L6,10 Z" fillOpacity="0.35"/>
+            <path d="M28,2 L34,8 L28,14 L22,8 Z" fillOpacity="0.25"/>
+            <path d="M2,28 L8,34 L2,40" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4"/>
+            <path d="M8,2 L8,20 M2,8 L20,8" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.3"/>
+            {/* Плетёный квадратный узор */}
+            <path d="M16,30 L22,24 L28,30 L22,36 Z" fillOpacity="0.2"/>
+            <path d="M30,16 L36,10 L42,16 L36,22 Z" fillOpacity="0.2"/>
+          </svg>
+          {/* Верх-право */}
+          <svg viewBox="0 0 90 90" className="absolute top-0 right-0 w-24 h-24 text-[hsl(30,35%,38%)] scale-x-[-1]" fill="currentColor">
+            <path d="M0,0 L90,0 L90,12 L12,12 L12,90 L0,90 Z" fillOpacity="0.18"/>
+            <path d="M0,0 L24,0 L24,4 L4,4 L4,24 L0,24 Z" fillOpacity="0.5"/>
+            <rect x="6" y="6" width="14" height="14" rx="1" fillOpacity="0.12"/>
+            <path d="M14,2 L22,10 L14,18 L6,10 Z" fillOpacity="0.35"/>
+            <path d="M28,2 L34,8 L28,14 L22,8 Z" fillOpacity="0.25"/>
+            <path d="M2,28 L8,34 L2,40" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4"/>
+            <path d="M8,2 L8,20 M2,8 L20,8" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.3"/>
+            <path d="M16,30 L22,24 L28,30 L22,36 Z" fillOpacity="0.2"/>
+            <path d="M30,16 L36,10 L42,16 L36,22 Z" fillOpacity="0.2"/>
+          </svg>
+          {/* Низ-лево */}
+          <svg viewBox="0 0 90 90" className="absolute bottom-0 left-0 w-24 h-24 text-[hsl(30,35%,38%)] scale-y-[-1]" fill="currentColor">
+            <path d="M0,0 L90,0 L90,12 L12,12 L12,90 L0,90 Z" fillOpacity="0.18"/>
+            <path d="M0,0 L24,0 L24,4 L4,4 L4,24 L0,24 Z" fillOpacity="0.5"/>
+            <rect x="6" y="6" width="14" height="14" rx="1" fillOpacity="0.12"/>
+            <path d="M14,2 L22,10 L14,18 L6,10 Z" fillOpacity="0.35"/>
+            <path d="M28,2 L34,8 L28,14 L22,8 Z" fillOpacity="0.25"/>
+            <path d="M2,28 L8,34 L2,40" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4"/>
+            <path d="M8,2 L8,20 M2,8 L20,8" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.3"/>
+            <path d="M16,30 L22,24 L28,30 L22,36 Z" fillOpacity="0.2"/>
+            <path d="M30,16 L36,10 L42,16 L36,22 Z" fillOpacity="0.2"/>
+          </svg>
+          {/* Низ-право */}
+          <svg viewBox="0 0 90 90" className="absolute bottom-0 right-0 w-24 h-24 text-[hsl(30,35%,38%)] scale-[-1]" fill="currentColor">
+            <path d="M0,0 L90,0 L90,12 L12,12 L12,90 L0,90 Z" fillOpacity="0.18"/>
+            <path d="M0,0 L24,0 L24,4 L4,4 L4,24 L0,24 Z" fillOpacity="0.5"/>
+            <rect x="6" y="6" width="14" height="14" rx="1" fillOpacity="0.12"/>
+            <path d="M14,2 L22,10 L14,18 L6,10 Z" fillOpacity="0.35"/>
+            <path d="M28,2 L34,8 L28,14 L22,8 Z" fillOpacity="0.25"/>
+            <path d="M2,28 L8,34 L2,40" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4"/>
+            <path d="M8,2 L8,20 M2,8 L20,8" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.3"/>
+            <path d="M16,30 L22,24 L28,30 L22,36 Z" fillOpacity="0.2"/>
+            <path d="M30,16 L36,10 L42,16 L36,22 Z" fillOpacity="0.2"/>
+          </svg>
+
+          {/* ── Контент по центру ── */}
+          <div className="relative z-10 flex flex-col items-center justify-between h-full py-10 px-8 text-center">
+
+            {/* Птицы вверху справа */}
+            <div className="self-end mr-8 mt-2">
+              <svg viewBox="0 0 80 30" className="w-24 text-[hsl(30,30%,40%)]/40" fill="currentColor">
+                <path d="M5,15 Q10,8 15,15 Q10,12 5,15Z"/>
+                <path d="M18,10 Q24,2 30,10 Q24,6 18,10Z"/>
+                <path d="M55,12 Q61,4 67,12 Q61,8 55,12Z"/>
+                <path d="M70,17 Q75,11 80,17 Q75,14 70,17Z"/>
+              </svg>
+            </div>
+
+            {/* Звезда-узел алтайский */}
+            <div className="flex flex-col items-center -mt-4">
+              <svg viewBox="0 0 64 64" className="w-14 h-14 text-[hsl(30,38%,35%)]" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M32 4 L38 20 L54 14 L44 28 L60 32 L44 36 L54 50 L38 44 L32 60 L26 44 L10 50 L20 36 L4 32 L20 28 L10 14 L26 20 Z"/>
+                <circle cx="32" cy="32" r="6" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.5"/>
+                <path d="M32 26 L35 29 L32 32 L29 29 Z" fill="currentColor" fillOpacity="0.4"/>
+              </svg>
+
+              {/* Имена */}
+              <h1 className="mt-5 text-[clamp(3.2rem,12vw,5.5rem)] leading-[1.05] text-[hsl(30,28%,20%)]"
+                  style={{ fontFamily: "'Cormorant', serif" }}>
+                Аэлита
+              </h1>
+              <span className="text-[clamp(2rem,7vw,3rem)] text-[hsl(34,40%,42%)] italic leading-none"
+                    style={{ fontFamily: "'Cormorant', serif" }}>
+                &amp;
+              </span>
+              <h1 className="text-[clamp(3.2rem,12vw,5.5rem)] leading-[1.05] text-[hsl(30,28%,20%)]"
+                  style={{ fontFamily: "'Cormorant', serif" }}>
+                Тузагаш
+              </h1>
+
+              {/* Ветки-разделитель */}
+              <div className="mt-5">
+                <svg viewBox="0 0 220 28" className="w-56 text-[hsl(30,35%,38%)]" fill="currentColor">
+                  <path d="M110,14 L104,10 L98,14 L104,18 Z" fillOpacity="0.7"/>
+                  {/* левая ветка */}
+                  <path d="M100,14 Q85,14 72,10 M85,14 Q80,10 76,6 M85,14 Q80,18 76,22 M92,14 Q88,10 84,7 M92,14 Q88,18 84,21"
+                        fill="none" stroke="currentColor" strokeWidth="1.3" strokeOpacity="0.55"/>
+                  <path d="M72,10 Q58,12 44,14 M58,12 Q53,8 49,5 M58,12 Q53,16 49,19 M65,11 Q61,8 57,5"
+                        fill="none" stroke="currentColor" strokeWidth="1.2" strokeOpacity="0.4"/>
+                  {/* стрелка лево */}
+                  <path d="M44,14 L30,14 M30,14 L36,10 M30,14 L36,18"
+                        fill="none" stroke="currentColor" strokeWidth="1.3" strokeOpacity="0.5"/>
+                  {/* правая ветка (зеркало) */}
+                  <path d="M120,14 Q135,14 148,10 M135,14 Q140,10 144,6 M135,14 Q140,18 144,22 M128,14 Q132,10 136,7 M128,14 Q132,18 136,21"
+                        fill="none" stroke="currentColor" strokeWidth="1.3" strokeOpacity="0.55"/>
+                  <path d="M148,10 Q162,12 176,14 M162,12 Q167,8 171,5 M162,12 Q167,16 171,19 M155,11 Q159,8 163,5"
+                        fill="none" stroke="currentColor" strokeWidth="1.2" strokeOpacity="0.4"/>
+                  {/* стрелка право */}
+                  <path d="M176,14 L190,14 M190,14 L184,10 M190,14 L184,18"
+                        fill="none" stroke="currentColor" strokeWidth="1.3" strokeOpacity="0.5"/>
+                </svg>
+              </div>
+            </div>
+
+            {/* Горы снизу */}
+            <div className="w-full flex flex-col items-center gap-3">
+              <svg viewBox="0 0 400 120" className="w-full text-[hsl(38,28%,72%)]" preserveAspectRatio="none">
+                {/* дальние горы */}
+                <polygon points="0,120 60,55 100,75 150,30 200,60 260,20 320,55 370,35 400,50 400,120" fill="currentColor" fillOpacity="0.35"/>
+                {/* ближние горы */}
+                <polygon points="0,120 40,80 80,95 130,60 180,85 230,50 290,75 340,58 400,70 400,120" fill="currentColor" fillOpacity="0.55"/>
+                {/* снег на пиках */}
+                <polygon points="150,30 158,45 142,45 Z" fill="white" fillOpacity="0.5"/>
+                <polygon points="260,20 270,38 250,38 Z" fill="white" fillOpacity="0.5"/>
+                <polygon points="370,35 378,50 362,50 Z" fill="white" fillOpacity="0.45"/>
+              </svg>
+
+              {/* Горный значок + подпись */}
+              <div className="flex flex-col items-center gap-1 -mt-2 animate-float">
+                <svg viewBox="0 0 40 28" className="w-10 text-[hsl(30,35%,40%)]" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <polyline points="4,24 14,8 20,16 28,4 36,24"/>
+                  <line x1="4" y1="24" x2="36" y2="24"/>
+                </svg>
+                <p className="text-[10px] uppercase tracking-[0.25em] text-[hsl(30,25%,35%)]/70"
+                   style={{ fontFamily: "'Oswald', sans-serif" }}>
+                  Экранга тийип ачыгар
+                </p>
+                <Icon name="ChevronDown" size={16} className="text-[hsl(34,40%,42%)]" />
+              </div>
+            </div>
+
           </div>
         </section>
       )}
