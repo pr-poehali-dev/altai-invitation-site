@@ -231,37 +231,15 @@ export default function Index() {
           </p>
           {/* Алтайский очаг */}
           <div style={{marginTop:28, display:'flex', flexDirection:'column', alignItems:'center', gap:10}}>
-            <svg viewBox="0 0 120 100" width={130} height={108} fill="none">
-              {/* Камни очага */}
-              <ellipse cx="60" cy="82" rx="42" ry="10" fill={G} fillOpacity="0.12"/>
-              <path d="M22,82 Q18,70 20,60 L26,58 Q24,70 28,80Z" fill={G} fillOpacity="0.35"/>
-              <path d="M98,82 Q102,70 100,60 L94,58 Q96,70 92,80Z" fill={G} fillOpacity="0.35"/>
-              <path d="M20,60 Q22,54 28,52 L92,52 Q98,54 100,60 L98,82 Q60,88 22,82Z"
-                fill={G} fillOpacity="0.18" stroke={G} strokeWidth="1.2" strokeOpacity="0.4"/>
-              {/* отдельные камни */}
-              <ellipse cx="35" cy="80" rx="10" ry="6" fill={G} fillOpacity="0.28"/>
-              <ellipse cx="60" cy="83" rx="12" ry="5" fill={G} fillOpacity="0.22"/>
-              <ellipse cx="85" cy="80" rx="10" ry="6" fill={G} fillOpacity="0.28"/>
-              {/* угли / жар */}
-              <ellipse cx="60" cy="64" rx="18" ry="6" fill="hsl(18,70%,52%)" fillOpacity="0.45"/>
-              <ellipse cx="55" cy="64" rx="8" ry="4" fill="hsl(28,80%,62%)" fillOpacity="0.5"/>
-              <ellipse cx="67" cy="65" rx="6" ry="3" fill="hsl(14,75%,55%)" fillOpacity="0.4"/>
-              {/* языки пламени */}
-              <path d="M52,64 C50,52 54,44 58,36 C56,46 62,50 60,38 C64,48 68,44 66,36 C70,46 66,54 68,64Z"
-                fill="hsl(30,85%,58%)" fillOpacity="0.75"/>
-              <path d="M56,64 C54,55 57,48 60,42 C63,48 66,55 64,64Z"
-                fill="hsl(42,90%,65%)" fillOpacity="0.8"/>
-              <path d="M59,64 C58,57 60,52 61,46 C62,52 64,58 62,64Z"
-                fill="hsl(50,95%,72%)" fillOpacity="0.7"/>
-              {/* дым */}
-              <path d="M57,36 C55,28 58,20 56,12" stroke={G} strokeWidth="1.5" strokeOpacity="0.12"
-                fill="none" strokeLinecap="round"/>
-              <path d="M61,38 C62,28 60,18 63,10" stroke={G} strokeWidth="1.2" strokeOpacity="0.1"
-                fill="none" strokeLinecap="round"/>
-              {/* декоративные точки по бокам камней */}
-              <circle cx="22" cy="72" r="2" fill={G} fillOpacity="0.2"/>
-              <circle cx="98" cy="72" r="2" fill={G} fillOpacity="0.2"/>
-            </svg>
+            <div style={{position:'relative', width:220, height:180}}>
+              <img
+                src="https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/bucket/544cc1d8-cc27-461b-a699-0dcc949ce589.jpg"
+                alt="Алтайский очаг"
+                style={{width:'100%', height:'100%', objectFit:'contain'}}
+              />
+              {/* плавное растворение по краям */}
+              <div style={{position:'absolute',inset:0,background:`radial-gradient(ellipse at center, transparent 55%, ${CR} 90%)`}}/>
+            </div>
 
             <p style={{
               fontFamily:"'Cormorant',serif",
