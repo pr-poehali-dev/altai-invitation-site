@@ -88,142 +88,183 @@ const Index = () => {
         <section
           onClick={() => setOpened(true)}
           className="fixed inset-0 z-50 cursor-pointer overflow-hidden flex flex-col"
-          style={{ background: 'linear-gradient(180deg, hsl(44,40%,93%) 0%, hsl(40,35%,86%) 60%, hsl(38,32%,80%) 100%)' }}
+          style={{ background: 'linear-gradient(180deg, hsl(46,45%,95%) 0%, hsl(42,38%,89%) 45%, hsl(38,32%,82%) 100%)' }}
         >
-          {/* ── Угловые плетёные орнаменты ── */}
-          {/* Верх-лево */}
-          <svg viewBox="0 0 90 90" className="absolute top-0 left-0 w-24 h-24 text-[hsl(30,35%,38%)]" fill="currentColor">
-            <path d="M0,0 L90,0 L90,12 L12,12 L12,90 L0,90 Z" fillOpacity="0.18"/>
-            <path d="M0,0 L24,0 L24,4 L4,4 L4,24 L0,24 Z" fillOpacity="0.5"/>
-            <rect x="6" y="6" width="14" height="14" rx="1" fillOpacity="0.12"/>
-            <path d="M14,2 L22,10 L14,18 L6,10 Z" fillOpacity="0.35"/>
-            <path d="M28,2 L34,8 L28,14 L22,8 Z" fillOpacity="0.25"/>
-            <path d="M2,28 L8,34 L2,40" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4"/>
-            <path d="M8,2 L8,20 M2,8 L20,8" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.3"/>
-            {/* Плетёный квадратный узор */}
-            <path d="M16,30 L22,24 L28,30 L22,36 Z" fillOpacity="0.2"/>
-            <path d="M30,16 L36,10 L42,16 L36,22 Z" fillOpacity="0.2"/>
-          </svg>
-          {/* Верх-право */}
-          <svg viewBox="0 0 90 90" className="absolute top-0 right-0 w-24 h-24 text-[hsl(30,35%,38%)] scale-x-[-1]" fill="currentColor">
-            <path d="M0,0 L90,0 L90,12 L12,12 L12,90 L0,90 Z" fillOpacity="0.18"/>
-            <path d="M0,0 L24,0 L24,4 L4,4 L4,24 L0,24 Z" fillOpacity="0.5"/>
-            <rect x="6" y="6" width="14" height="14" rx="1" fillOpacity="0.12"/>
-            <path d="M14,2 L22,10 L14,18 L6,10 Z" fillOpacity="0.35"/>
-            <path d="M28,2 L34,8 L28,14 L22,8 Z" fillOpacity="0.25"/>
-            <path d="M2,28 L8,34 L2,40" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4"/>
-            <path d="M8,2 L8,20 M2,8 L20,8" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.3"/>
-            <path d="M16,30 L22,24 L28,30 L22,36 Z" fillOpacity="0.2"/>
-            <path d="M30,16 L36,10 L42,16 L36,22 Z" fillOpacity="0.2"/>
-          </svg>
-          {/* Низ-лево */}
-          <svg viewBox="0 0 90 90" className="absolute bottom-0 left-0 w-24 h-24 text-[hsl(30,35%,38%)] scale-y-[-1]" fill="currentColor">
-            <path d="M0,0 L90,0 L90,12 L12,12 L12,90 L0,90 Z" fillOpacity="0.18"/>
-            <path d="M0,0 L24,0 L24,4 L4,4 L4,24 L0,24 Z" fillOpacity="0.5"/>
-            <rect x="6" y="6" width="14" height="14" rx="1" fillOpacity="0.12"/>
-            <path d="M14,2 L22,10 L14,18 L6,10 Z" fillOpacity="0.35"/>
-            <path d="M28,2 L34,8 L28,14 L22,8 Z" fillOpacity="0.25"/>
-            <path d="M2,28 L8,34 L2,40" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4"/>
-            <path d="M8,2 L8,20 M2,8 L20,8" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.3"/>
-            <path d="M16,30 L22,24 L28,30 L22,36 Z" fillOpacity="0.2"/>
-            <path d="M30,16 L36,10 L42,16 L36,22 Z" fillOpacity="0.2"/>
-          </svg>
-          {/* Низ-право */}
-          <svg viewBox="0 0 90 90" className="absolute bottom-0 right-0 w-24 h-24 text-[hsl(30,35%,38%)] scale-[-1]" fill="currentColor">
-            <path d="M0,0 L90,0 L90,12 L12,12 L12,90 L0,90 Z" fillOpacity="0.18"/>
-            <path d="M0,0 L24,0 L24,4 L4,4 L4,24 L0,24 Z" fillOpacity="0.5"/>
-            <rect x="6" y="6" width="14" height="14" rx="1" fillOpacity="0.12"/>
-            <path d="M14,2 L22,10 L14,18 L6,10 Z" fillOpacity="0.35"/>
-            <path d="M28,2 L34,8 L28,14 L22,8 Z" fillOpacity="0.25"/>
-            <path d="M2,28 L8,34 L2,40" fill="none" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4"/>
-            <path d="M8,2 L8,20 M2,8 L20,8" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.3"/>
-            <path d="M16,30 L22,24 L28,30 L22,36 Z" fillOpacity="0.2"/>
-            <path d="M30,16 L36,10 L42,16 L36,22 Z" fillOpacity="0.2"/>
-          </svg>
+          {/* ── Алтайские угловые орнаменты (плетёный бордюр) ── */}
+          {(['tl','tr','bl','br'] as const).map(pos => (
+            <svg key={pos} viewBox="0 0 120 120"
+              className={`absolute w-32 h-32 text-[hsl(28,38%,32%)]
+                ${pos==='tl' ? 'top-0 left-0' : ''}
+                ${pos==='tr' ? 'top-0 right-0 scale-x-[-1]' : ''}
+                ${pos==='bl' ? 'bottom-0 left-0 scale-y-[-1]' : ''}
+                ${pos==='br' ? 'bottom-0 right-0 scale-[-1]' : ''}`}
+              fill="none" stroke="currentColor">
+              {/* Внешняя рамка */}
+              <path d="M2,2 L60,2 L60,6 L6,6 L6,60 L2,60 Z" strokeWidth="0" fill="currentColor" fillOpacity="0.55"/>
+              {/* Тройная линия угла */}
+              <path d="M10,10 L55,10" strokeWidth="1" strokeOpacity="0.4"/>
+              <path d="M10,10 L10,55" strokeWidth="1" strokeOpacity="0.4"/>
+              <path d="M14,14 L50,14" strokeWidth="0.7" strokeOpacity="0.3"/>
+              <path d="M14,14 L14,50" strokeWidth="0.7" strokeOpacity="0.3"/>
+              {/* Ромбы по бордюру */}
+              <path d="M20,2 L24,6 L20,10 L16,6 Z" fill="currentColor" fillOpacity="0.6" strokeWidth="0"/>
+              <path d="M34,2 L38,6 L34,10 L30,6 Z" fill="currentColor" fillOpacity="0.45" strokeWidth="0"/>
+              <path d="M48,2 L52,6 L48,10 L44,6 Z" fill="currentColor" fillOpacity="0.3" strokeWidth="0"/>
+              <path d="M2,20 L6,24 L10,20 L6,16 Z" fill="currentColor" fillOpacity="0.6" strokeWidth="0"/>
+              <path d="M2,34 L6,38 L10,34 L6,30 Z" fill="currentColor" fillOpacity="0.45" strokeWidth="0"/>
+              <path d="M2,48 L6,52 L10,48 L6,44 Z" fill="currentColor" fillOpacity="0.3" strokeWidth="0"/>
+              {/* Центральный алтайский крест-узел */}
+              <path d="M28,28 L36,20 L44,28 L36,36 Z" fill="currentColor" fillOpacity="0.2" strokeWidth="0"/>
+              <path d="M32,24 L36,20 L40,24 L36,28 Z" fill="currentColor" fillOpacity="0.45" strokeWidth="0"/>
+              <path d="M28,28 L32,32 L28,36 L24,32 Z" fill="currentColor" fillOpacity="0.25" strokeWidth="0"/>
+              <path d="M36,36 L40,32 L44,36 L40,40 Z" fill="currentColor" fillOpacity="0.25" strokeWidth="0"/>
+              <circle cx="36" cy="28" r="2.5" fill="currentColor" fillOpacity="0.5" strokeWidth="0"/>
+              {/* Мелкие квадратики-плетение */}
+              <rect x="16" y="22" width="5" height="5" transform="rotate(45 18.5 24.5)" fill="currentColor" fillOpacity="0.15" strokeWidth="0"/>
+              <rect x="22" y="16" width="5" height="5" transform="rotate(45 24.5 18.5)" fill="currentColor" fillOpacity="0.15" strokeWidth="0"/>
+            </svg>
+          ))}
 
-          {/* ── Контент по центру ── */}
-          <div className="relative z-10 flex flex-col items-center justify-between h-full py-10 px-8 text-center">
+          {/* ── Контент ── */}
+          <div className="relative z-10 flex flex-col items-center justify-between h-full py-10 px-6 text-center">
 
-            {/* Птицы вверху справа */}
-            <div className="self-end mr-8 mt-2">
-              <svg viewBox="0 0 80 30" className="w-24 text-[hsl(30,30%,40%)]/40" fill="currentColor">
-                <path d="M5,15 Q10,8 15,15 Q10,12 5,15Z"/>
-                <path d="M18,10 Q24,2 30,10 Q24,6 18,10Z"/>
-                <path d="M55,12 Q61,4 67,12 Q61,8 55,12Z"/>
-                <path d="M70,17 Q75,11 80,17 Q75,14 70,17Z"/>
+            {/* Орлы вверху */}
+            <div className="w-full flex justify-end pr-10 pt-2">
+              <svg viewBox="0 0 160 80" className="w-40 h-20 text-[hsl(28,30%,38%)]" fill="currentColor">
+                {/* Орёл 1 — крупный, в полёте */}
+                <g fillOpacity="0.55" transform="translate(10,10)">
+                  {/* тело */}
+                  <ellipse cx="30" cy="22" rx="9" ry="4" transform="rotate(-8 30 22)"/>
+                  {/* голова */}
+                  <ellipse cx="39" cy="17" rx="4" ry="3.5" transform="rotate(-15 39 17)"/>
+                  {/* клюв */}
+                  <path d="M42,15 L47,17 L42,19 Z"/>
+                  {/* левое крыло вверх */}
+                  <path d="M28,20 Q18,8 4,4 Q12,10 18,18 Q22,14 28,20Z"/>
+                  {/* правое крыло вниз */}
+                  <path d="M32,24 Q22,34 8,38 Q16,30 24,26 Q27,30 32,24Z"/>
+                  {/* хвост */}
+                  <path d="M21,24 Q14,28 10,32 Q14,26 21,24Z"/>
+                  <path d="M20,26 Q12,32 9,36 Q14,29 20,26Z"/>
+                </g>
+                {/* Орёл 2 — поменьше, дальше */}
+                <g fillOpacity="0.35" transform="translate(90,0) scale(0.65)">
+                  <ellipse cx="30" cy="22" rx="9" ry="4" transform="rotate(-8 30 22)"/>
+                  <ellipse cx="39" cy="17" rx="4" ry="3.5" transform="rotate(-15 39 17)"/>
+                  <path d="M42,15 L47,17 L42,19 Z"/>
+                  <path d="M28,20 Q18,8 4,4 Q12,10 18,18 Q22,14 28,20Z"/>
+                  <path d="M32,24 Q22,34 8,38 Q16,30 24,26 Q27,30 32,24Z"/>
+                  <path d="M21,24 Q14,28 10,32 Q14,26 21,24Z"/>
+                </g>
               </svg>
             </div>
 
-            {/* Звезда-узел алтайский */}
-            <div className="flex flex-col items-center -mt-4">
-              <svg viewBox="0 0 64 64" className="w-14 h-14 text-[hsl(30,38%,35%)]" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M32 4 L38 20 L54 14 L44 28 L60 32 L44 36 L54 50 L38 44 L32 60 L26 44 L10 50 L20 36 L4 32 L20 28 L10 14 L26 20 Z"/>
-                <circle cx="32" cy="32" r="6" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.5"/>
-                <path d="M32 26 L35 29 L32 32 L29 29 Z" fill="currentColor" fillOpacity="0.4"/>
+            {/* Алтайский центральный узор + имена */}
+            <div className="flex flex-col items-center -mt-2">
+              {/* Алтайский узор «кереге» */}
+              <svg viewBox="0 0 80 80" className="w-16 h-16 text-[hsl(28,38%,32%)]" fill="none" stroke="currentColor" strokeWidth="1.2">
+                <path d="M40,4 L52,16 L64,4 L64,16 L52,28 L64,40 L52,40 L40,52 L28,40 L16,40 L28,28 L16,16 L28,4 Z" strokeOpacity="0.5"/>
+                <path d="M40,14 L48,22 L40,30 L32,22 Z" fill="currentColor" fillOpacity="0.12" stroke="currentColor" strokeOpacity="0.6"/>
+                <path d="M40,30 L48,38 L40,46 L32,38 Z" fill="currentColor" fillOpacity="0.08" stroke="currentColor" strokeOpacity="0.4"/>
+                <circle cx="40" cy="40" r="4" fill="currentColor" fillOpacity="0.3" strokeWidth="0"/>
+                <path d="M40,4 L40,76 M4,40 L76,40" strokeOpacity="0.12" strokeWidth="0.8"/>
+                <path d="M16,16 L64,64 M64,16 L16,64" strokeOpacity="0.08" strokeWidth="0.8"/>
               </svg>
 
               {/* Имена */}
-              <h1 className="mt-5 text-[clamp(3.2rem,12vw,5.5rem)] leading-[1.05] text-[hsl(30,28%,20%)]"
-                  style={{ fontFamily: "'Cormorant', serif" }}>
+              <h1 className="mt-4 leading-[1.05] text-[hsl(28,30%,18%)]"
+                  style={{ fontFamily: "'Cormorant', serif", fontSize: 'clamp(3rem, 14vw, 5.5rem)' }}>
                 Аэлита
               </h1>
-              <span className="text-[clamp(2rem,7vw,3rem)] text-[hsl(34,40%,42%)] italic leading-none"
-                    style={{ fontFamily: "'Cormorant', serif" }}>
+              <span className="leading-none text-[hsl(32,42%,40%)] italic"
+                    style={{ fontFamily: "'Cormorant', serif", fontSize: 'clamp(2rem, 8vw, 3.2rem)' }}>
                 &amp;
               </span>
-              <h1 className="text-[clamp(3.2rem,12vw,5.5rem)] leading-[1.05] text-[hsl(30,28%,20%)]"
-                  style={{ fontFamily: "'Cormorant', serif" }}>
+              <h1 className="leading-[1.05] text-[hsl(28,30%,18%)]"
+                  style={{ fontFamily: "'Cormorant', serif", fontSize: 'clamp(3rem, 14vw, 5.5rem)' }}>
                 Тузагаш
               </h1>
 
-              {/* Ветки-разделитель */}
-              <div className="mt-5">
-                <svg viewBox="0 0 220 28" className="w-56 text-[hsl(30,35%,38%)]" fill="currentColor">
-                  <path d="M110,14 L104,10 L98,14 L104,18 Z" fillOpacity="0.7"/>
-                  {/* левая ветка */}
-                  <path d="M100,14 Q85,14 72,10 M85,14 Q80,10 76,6 M85,14 Q80,18 76,22 M92,14 Q88,10 84,7 M92,14 Q88,18 84,21"
-                        fill="none" stroke="currentColor" strokeWidth="1.3" strokeOpacity="0.55"/>
-                  <path d="M72,10 Q58,12 44,14 M58,12 Q53,8 49,5 M58,12 Q53,16 49,19 M65,11 Q61,8 57,5"
-                        fill="none" stroke="currentColor" strokeWidth="1.2" strokeOpacity="0.4"/>
-                  {/* стрелка лево */}
-                  <path d="M44,14 L30,14 M30,14 L36,10 M30,14 L36,18"
-                        fill="none" stroke="currentColor" strokeWidth="1.3" strokeOpacity="0.5"/>
-                  {/* правая ветка (зеркало) */}
-                  <path d="M120,14 Q135,14 148,10 M135,14 Q140,10 144,6 M135,14 Q140,18 144,22 M128,14 Q132,10 136,7 M128,14 Q132,18 136,21"
-                        fill="none" stroke="currentColor" strokeWidth="1.3" strokeOpacity="0.55"/>
-                  <path d="M148,10 Q162,12 176,14 M162,12 Q167,8 171,5 M162,12 Q167,16 171,19 M155,11 Q159,8 163,5"
-                        fill="none" stroke="currentColor" strokeWidth="1.2" strokeOpacity="0.4"/>
-                  {/* стрелка право */}
-                  <path d="M176,14 L190,14 M190,14 L184,10 M190,14 L184,18"
-                        fill="none" stroke="currentColor" strokeWidth="1.3" strokeOpacity="0.5"/>
-                </svg>
-              </div>
+              {/* Ветки с ромбом */}
+              <svg viewBox="0 0 260 32" className="w-64 mt-4 text-[hsl(28,35%,36%)]" fill="none" stroke="currentColor">
+                {/* центральный ромб */}
+                <path d="M130,16 L122,10 L114,16 L122,22 Z" fill="currentColor" fillOpacity="0.5" strokeWidth="0"/>
+                {/* стрелка-линия влево */}
+                <line x1="112" y1="16" x2="10" y2="16" strokeWidth="0.8" strokeOpacity="0.45"/>
+                <path d="M10,16 L18,11 M10,16 L18,21" strokeWidth="1" strokeOpacity="0.5"/>
+                {/* веточки влево */}
+                <path d="M95,16 Q90,11 85,8" strokeWidth="0.9" strokeOpacity="0.4"/>
+                <path d="M95,16 Q90,21 85,24" strokeWidth="0.9" strokeOpacity="0.4"/>
+                <path d="M75,16 Q70,11 65,8" strokeWidth="0.8" strokeOpacity="0.35"/>
+                <path d="M75,16 Q70,21 65,24" strokeWidth="0.8" strokeOpacity="0.35"/>
+                <path d="M55,16 Q50,12 45,10" strokeWidth="0.7" strokeOpacity="0.3"/>
+                <path d="M55,16 Q50,20 45,22" strokeWidth="0.7" strokeOpacity="0.3"/>
+                {/* стрелка-линия вправо */}
+                <line x1="148" y1="16" x2="250" y2="16" strokeWidth="0.8" strokeOpacity="0.45"/>
+                <path d="M250,16 L242,11 M250,16 L242,21" strokeWidth="1" strokeOpacity="0.5"/>
+                {/* веточки вправо */}
+                <path d="M165,16 Q170,11 175,8" strokeWidth="0.9" strokeOpacity="0.4"/>
+                <path d="M165,16 Q170,21 175,24" strokeWidth="0.9" strokeOpacity="0.4"/>
+                <path d="M185,16 Q190,11 195,8" strokeWidth="0.8" strokeOpacity="0.35"/>
+                <path d="M185,16 Q190,21 195,24" strokeWidth="0.8" strokeOpacity="0.35"/>
+                <path d="M205,16 Q210,12 215,10" strokeWidth="0.7" strokeOpacity="0.3"/>
+                <path d="M205,16 Q210,20 215,22" strokeWidth="0.7" strokeOpacity="0.3"/>
+              </svg>
             </div>
 
-            {/* Горы снизу */}
-            <div className="w-full flex flex-col items-center gap-3">
-              <svg viewBox="0 0 400 120" className="w-full text-[hsl(38,28%,72%)]" preserveAspectRatio="none">
-                {/* дальние горы */}
-                <polygon points="0,120 60,55 100,75 150,30 200,60 260,20 320,55 370,35 400,50 400,120" fill="currentColor" fillOpacity="0.35"/>
-                {/* ближние горы */}
-                <polygon points="0,120 40,80 80,95 130,60 180,85 230,50 290,75 340,58 400,70 400,120" fill="currentColor" fillOpacity="0.55"/>
-                {/* снег на пиках */}
-                <polygon points="150,30 158,45 142,45 Z" fill="white" fillOpacity="0.5"/>
-                <polygon points="260,20 270,38 250,38 Z" fill="white" fillOpacity="0.5"/>
-                <polygon points="370,35 378,50 362,50 Z" fill="white" fillOpacity="0.45"/>
+            {/* Горы реалистичные снизу */}
+            <div className="w-full -mb-1">
+              <svg viewBox="0 0 400 160" className="w-full" preserveAspectRatio="xMidYMax meet">
+                <defs>
+                  <linearGradient id="mist" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="hsl(44,40%,92%)" stopOpacity="0"/>
+                    <stop offset="100%" stopColor="hsl(40,35%,84%)" stopOpacity="0.9"/>
+                  </linearGradient>
+                  <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="hsl(38,20%,78%)"/>
+                    <stop offset="100%" stopColor="hsl(35,18%,68%)"/>
+                  </linearGradient>
+                  <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="hsl(36,18%,65%)"/>
+                    <stop offset="100%" stopColor="hsl(33,16%,55%)"/>
+                  </linearGradient>
+                  <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="hsl(34,16%,55%)"/>
+                    <stop offset="100%" stopColor="hsl(32,14%,45%)"/>
+                  </linearGradient>
+                </defs>
+                {/* Дальние горы — светлые */}
+                <path d="M0,160 L0,110 L30,85 L55,100 L80,70 L105,88 L135,50 L160,72 L185,42 L210,65 L240,30 L265,55 L290,35 L315,58 L340,40 L365,62 L390,45 L400,52 L400,160 Z"
+                      fill="url(#g1)" opacity="0.5"/>
+                {/* снег дальних пиков */}
+                <path d="M135,50 L145,65 L125,65 Z" fill="white" opacity="0.45"/>
+                <path d="M240,30 L252,50 L228,50 Z" fill="white" opacity="0.5"/>
+                <path d="M290,35 L300,52 L280,52 Z" fill="white" opacity="0.4"/>
+                {/* Средние горы */}
+                <path d="M0,160 L0,125 L25,100 L55,118 L85,88 L115,108 L145,72 L170,92 L200,60 L228,80 L255,55 L280,75 L310,62 L335,78 L365,65 L390,80 L400,74 L400,160 Z"
+                      fill="url(#g2)" opacity="0.65"/>
+                <path d="M145,72 L155,88 L135,88 Z" fill="white" opacity="0.4"/>
+                <path d="M200,60 L210,78 L190,78 Z" fill="white" opacity="0.45"/>
+                <path d="M255,55 L264,72 L246,72 Z" fill="white" opacity="0.35"/>
+                {/* Ближние горы — тёмные */}
+                <path d="M0,160 L0,140 L35,115 L70,132 L105,108 L140,125 L175,100 L205,118 L235,95 L265,112 L295,98 L325,115 L360,104 L390,118 L400,112 L400,160 Z"
+                      fill="url(#g3)" opacity="0.7"/>
+                {/* Туман */}
+                <rect x="0" y="120" width="400" height="40" fill="url(#mist)"/>
               </svg>
 
               {/* Горный значок + подпись */}
-              <div className="flex flex-col items-center gap-1 -mt-2 animate-float">
-                <svg viewBox="0 0 40 28" className="w-10 text-[hsl(30,35%,40%)]" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <polyline points="4,24 14,8 20,16 28,4 36,24"/>
-                  <line x1="4" y1="24" x2="36" y2="24"/>
+              <div className="flex flex-col items-center gap-1 mt-1 animate-float">
+                <svg viewBox="0 0 44 30" className="w-10 text-[hsl(28,35%,38%)]" fill="none" stroke="currentColor" strokeWidth="1.6">
+                  <polyline points="4,26 16,8 22,16 30,4 38,26"/>
+                  <line x1="4" y1="26" x2="38" y2="26" strokeWidth="1"/>
+                  <path d="M22,4 L25,10 L19,10 Z" fill="currentColor" fillOpacity="0.3" strokeWidth="0"/>
                 </svg>
-                <p className="text-[10px] uppercase tracking-[0.25em] text-[hsl(30,25%,35%)]/70"
+                <p className="text-[10px] uppercase tracking-[0.22em] text-[hsl(28,22%,32%)]/65"
                    style={{ fontFamily: "'Oswald', sans-serif" }}>
                   Экранга тийип ачыгар
                 </p>
-                <Icon name="ChevronDown" size={16} className="text-[hsl(34,40%,42%)]" />
+                <Icon name="ChevronDown" size={16} className="text-[hsl(32,40%,40%)]" />
               </div>
             </div>
 
