@@ -357,13 +357,24 @@ export default function Index() {
               letterSpacing:'0.1em',
               marginTop:6,
             }}>
-              кафе • Кош-Агач
+              кафе • с. Кош-Агач, ул. Каменистая, 27
             </p>
           </div>
 
           <Sep/>
 
-          <a href="https://maps.yandex.ru/?text=Кош-Агач+кафе+Туштажу"
+          {/* Карта Яндекс */}
+          <div style={{width:'100%', maxWidth:340, borderRadius:16, overflow:'hidden',
+            boxShadow:`0 4px 24px ${G}22`, border:`1px solid ${G}22`}}>
+            <iframe
+              src="https://yandex.ru/map-widget/v1/?ll=88.657,50.079&z=16&pt=88.657,50.079,pm2rdm&text=Кош-Агач+ул.+Каменистая+27"
+              width="100%" height="200" frameBorder="0"
+              style={{display:'block'}}
+              title="Карта"
+            />
+          </div>
+
+          <a href="https://yandex.ru/maps/?text=Кош-Агач+ул.+Каменистая+27"
             target="_blank" rel="noreferrer"
             onClick={e => e.stopPropagation()}
             style={{
