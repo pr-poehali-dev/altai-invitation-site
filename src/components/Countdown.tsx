@@ -28,15 +28,28 @@ const Countdown = () => {
   }, []);
 
   return (
-    <div className="flex justify-center gap-2 sm:gap-4">
+    <div className="flex justify-center gap-3 sm:gap-5">
       {(['days', 'hours', 'minutes', 'seconds'] as const).map((k) => (
         <div key={k} className="flex flex-col items-center">
-          <div className="parchment frame-gold rounded-lg w-16 sm:w-20 py-3 flex items-center justify-center">
-            <span className="font-display text-3xl sm:text-4xl text-deep tabular-nums">
+          <div
+            className="rounded-xl w-16 sm:w-20 py-3 flex items-center justify-center border"
+            style={{
+              background: 'hsl(42,38%,88%)',
+              borderColor: 'hsl(36,45%,45%,0.4)',
+              boxShadow: '0 0 0 1px hsl(42,38%,80%) inset',
+            }}
+          >
+            <span
+              className="text-3xl sm:text-4xl tabular-nums"
+              style={{ fontFamily: "'Cormorant', serif", color: 'hsl(30,28%,18%)' }}
+            >
               {String(t[k]).padStart(2, '0')}
             </span>
           </div>
-          <span className="font-cond uppercase tracking-widest text-[10px] sm:text-xs text-gold mt-2">
+          <span
+            className="uppercase tracking-widest text-[9px] sm:text-[11px] mt-2"
+            style={{ fontFamily: "'Oswald', sans-serif", color: 'hsl(36,45%,45%)' }}
+          >
             {labels[k]}
           </span>
         </div>
