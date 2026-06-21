@@ -88,11 +88,12 @@ const Index = () => {
         <section
           onClick={() => setOpened(true)}
           className="fixed inset-0 z-50 cursor-pointer overflow-hidden"
+          style={{ background: 'hsl(42,35%,90%)' }}
         >
           <img
             src={IMG_SLIDE1}
             alt=""
-            className="absolute inset-0 w-full h-full object-cover object-center"
+            className="absolute inset-0 w-full h-full object-contain object-center"
           />
           {/* Только подпись снизу */}
           <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-1 animate-float z-10">
