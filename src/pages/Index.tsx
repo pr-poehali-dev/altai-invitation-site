@@ -416,17 +416,7 @@ export default function Index() {
             Мы ждём вас
           </p>
           <Sep/>
-          <div style={{display:'flex', alignItems:'center', gap:10}}>
-            <Icon name="Phone" size={16} style={{color:CR, opacity:0.7}}/>
-            <span style={{
-              fontFamily:"'Golos Text',sans-serif",
-              fontSize:'clamp(1rem,4.5vw,1.2rem)',
-              color:CR,
-              letterSpacing:'0.06em',
-            }}>
-              +7 (900) 000-00-00
-            </span>
-          </div>
+
           <p style={{
             fontFamily:"'Golos Text',sans-serif",
             fontSize:'10px',
