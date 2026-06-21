@@ -61,46 +61,12 @@ const Sep = () => (
   </div>
 );
 
-/* ── Боковые алтайские орнаменты ── */
+/* ── Боковые линии ── */
 const Side = ({ flip = false }: { flip?: boolean }) => (
-  <svg viewBox="0 0 36 800" preserveAspectRatio="xMidYMid slice"
+  <svg viewBox="0 0 8 800" preserveAspectRatio="xMidYMid slice"
     className="absolute top-0 h-full pointer-events-none z-10"
-    style={{width:36, ...(flip ? {right:0, transform:'scaleX(-1)'} : {left:0})}}>
-
-    {/* Крайняя линия */}
-    <rect x="0" y="0" width="1.5" height="800" fill={G} fillOpacity="0.55"/>
-    {/* Вторая линия */}
-    <rect x="4" y="0" width="0.7" height="800" fill={G} fillOpacity="0.2"/>
-
-    {/* Повторяющийся блок — алтайский орнамент «кочкор мүйүз» (роговидный завиток) */}
-    {Array.from({length:16}).map((_,i) => {
-      const y = i * 50;
-      return (
-        <g key={i} transform={`translate(0,${y})`}>
-          {/* Горизонтальная перемычка */}
-          <line x1="4" y1="0" x2="36" y2="0" stroke={G} strokeWidth="0.6" strokeOpacity="0.2"/>
-
-          {/* Роговидный завиток "кочкор" — S-образная спираль */}
-          <path
-            d="M8,8 C8,4 12,2 16,4 C20,6 20,10 16,12 C12,14 10,18 14,20 C18,22 22,20 22,16"
-            fill="none" stroke={G} strokeWidth="1.3" strokeOpacity="0.55" strokeLinecap="round"/>
-          {/* Зеркальный завиток снизу */}
-          <path
-            d="M8,42 C8,46 12,48 16,46 C20,44 20,40 16,38 C12,36 10,32 14,30 C18,28 22,30 22,34"
-            fill="none" stroke={G} strokeWidth="1.3" strokeOpacity="0.55" strokeLinecap="round"/>
-
-          {/* Центральный элемент — алтайская звёздочка */}
-          <g transform="translate(18,25)">
-            <path d="M0,-5 L1.5,-1.5 L5,0 L1.5,1.5 L0,5 L-1.5,1.5 L-5,0 L-1.5,-1.5Z"
-              fill={G} fillOpacity="0.35"/>
-            <circle cx="0" cy="0" r="1.5" fill={G} fillOpacity="0.6"/>
-          </g>
-
-          {/* Точки-заполнители по краю */}
-          <circle cx="8" cy="25" r="1.2" fill={G} fillOpacity="0.25"/>
-        </g>
-      );
-    })}
+    style={{width:8, ...(flip ? {right:0, transform:'scaleX(-1)'} : {left:0})}}>
+    <rect x="0" y="0" width="1.2" height="800" fill={G} fillOpacity="0.3"/>
   </svg>
 );
 
