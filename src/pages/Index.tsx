@@ -3,6 +3,7 @@ import Icon from '@/components/ui/icon';
 import Countdown from '@/components/Countdown';
 
 /* ── Картинки ── */
+const IMG_SLIDE1 = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/bucket/f5cf4882-13ce-42ce-93e3-907d1c2de5fc.jpg';
 const IMG_FIRE   = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/d71ff136-0e27-44f1-8f11-84bcc374afc7.jpg';
 const IMG_COUPLE = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/cf67aa21-0239-478b-801d-dedd34d2401d.jpg';
 const IMG_VALLEY = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/04be6736-f750-416e-8026-c3d5f8f53dfb.jpg';
@@ -86,40 +87,45 @@ const Index = () => {
       {!opened && (
         <section
           onClick={() => setOpened(true)}
-          className="fixed inset-0 z-50 cursor-pointer flex flex-col items-center justify-between py-10 px-6 text-center overflow-hidden"
-          style={{ background: 'linear-gradient(160deg, hsl(42,38%,94%) 0%, hsl(38,32%,86%) 100%)' }}
+          className="fixed inset-0 z-50 cursor-pointer overflow-hidden"
         >
-          <Corners />
+          {/* Фон — точно эскиз слайда 1 */}
+          <img
+            src={IMG_SLIDE1}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
+          {/* Лёгкий оверлей чтобы текст читался */}
+          <div className="absolute inset-0 bg-[hsl(42,38%,92%)]/20" />
 
-          {/* Птицы вверху */}
-          <Birds className="w-48 text-[hsl(var(--deep))]/25 mt-4" />
+          {/* Текст поверх — имена по центру, подпись снизу */}
+          <div className="relative z-10 h-full flex flex-col items-center justify-between py-[12%] px-6 text-center">
+            {/* Пустой верх — там птицы и узор уже на картинке */}
+            <div />
 
-          {/* Центральный блок */}
-          <div className="flex flex-col items-center gap-0">
-            <Knot className="w-10 h-10 text-[hsl(var(--gold))] mb-5" />
-            <p className="uppercase tracking-[0.45em] text-[10px] text-[hsl(var(--gold))] mb-4"
-               style={{ fontFamily: "'Oswald', sans-serif" }}>
-              Туштажу
-            </p>
-            <h1 className="text-6xl sm:text-7xl leading-[1.05] text-[hsl(var(--deep))] reveal" style={{ animationDelay: '0.15s' }}>
-              Аэлита
-            </h1>
-            <span className="text-3xl text-[hsl(var(--gold))] italic my-1 block reveal" style={{ animationDelay: '0.25s' }}>&amp;</span>
-            <h1 className="text-6xl sm:text-7xl leading-[1.05] text-[hsl(var(--deep))] reveal" style={{ animationDelay: '0.35s' }}>
-              Тузагаш
-            </h1>
-            <Sep />
-          </div>
+            {/* Имена */}
+            <div className="flex flex-col items-center">
+              <h1 className="text-6xl sm:text-7xl leading-[1.1] text-[hsl(30,28%,20%)] reveal"
+                  style={{ fontFamily: "'Cormorant', serif", animationDelay: '0.1s' }}>
+                Аэлита
+              </h1>
+              <span className="text-4xl text-[hsl(36,42%,42%)] italic my-0.5 block reveal"
+                    style={{ fontFamily: "'Cormorant', serif", animationDelay: '0.2s' }}>
+                &amp;
+              </span>
+              <h1 className="text-6xl sm:text-7xl leading-[1.1] text-[hsl(30,28%,20%)] reveal"
+                  style={{ fontFamily: "'Cormorant', serif", animationDelay: '0.3s' }}>
+                Тузагаш
+              </h1>
+            </div>
 
-          {/* Горы + подпись внизу */}
-          <div className="flex flex-col items-center gap-3 w-full">
-            <Mountains className="w-48 text-[hsl(var(--deep))]/15" />
+            {/* Подпись внизу — на картинке уже есть горный значок */}
             <div className="flex flex-col items-center gap-1 animate-float">
-              <p className="text-[10px] uppercase tracking-widest text-[hsl(var(--deep))]/60"
+              <p className="text-[11px] uppercase tracking-widest text-[hsl(30,25%,28%)]/80"
                  style={{ fontFamily: "'Oswald', sans-serif" }}>
                 Экранга тийип ачыгар
               </p>
-              <Icon name="ChevronDown" size={18} className="text-[hsl(var(--gold))]" />
+              <Icon name="ChevronDown" size={18} className="text-[hsl(36,42%,42%)]" />
             </div>
           </div>
         </section>
