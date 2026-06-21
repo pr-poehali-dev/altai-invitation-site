@@ -249,6 +249,18 @@ export default function Index() {
         <img src={IMG_COUPLE} alt=""
              className="absolute inset-0 w-full h-full"
              style={{objectFit:'contain', objectPosition:'center center', background:'hsl(40,50%,96%)'}}/>
+        {/* Плавный переход сверху */}
+        <div className="absolute top-0 left-0 right-0 h-28 pointer-events-none"
+             style={{background:'linear-gradient(to bottom, hsl(40,50%,96%) 0%, transparent 100%)'}}/>
+        {/* Плавный переход снизу */}
+        <div className="absolute bottom-0 left-0 right-0 h-28 pointer-events-none"
+             style={{background:'linear-gradient(to top, hsl(40,50%,96%) 0%, transparent 100%)'}}/>
+        {/* Плавный переход слева */}
+        <div className="absolute top-0 left-0 bottom-0 w-16 pointer-events-none"
+             style={{background:'linear-gradient(to right, hsl(40,50%,96%) 0%, transparent 100%)'}}/>
+        {/* Плавный переход справа */}
+        <div className="absolute top-0 right-0 bottom-0 w-16 pointer-events-none"
+             style={{background:'linear-gradient(to left, hsl(40,50%,96%) 0%, transparent 100%)'}}/>
         <Side/><Side flip/>
       </section>
 
