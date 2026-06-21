@@ -1,445 +1,413 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Icon from '@/components/ui/icon';
 import Countdown from '@/components/Countdown';
 
-/* ── Картинки ── */
-const IMG_SLIDE1 = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/bucket/f5cf4882-13ce-42ce-93e3-907d1c2de5fc.jpg';
 const IMG_FIRE   = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/d71ff136-0e27-44f1-8f11-84bcc374afc7.jpg';
 const IMG_COUPLE = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/cf67aa21-0239-478b-801d-dedd34d2401d.jpg';
 const IMG_VALLEY = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/04be6736-f750-416e-8026-c3d5f8f53dfb.jpg';
 
-/* ── SVG-орнаменты из эскиза ── */
-
-/* Алтайский ромб-узел (центральный) */
-const Knot = ({ className = '' }: { className?: string }) => (
-  <svg viewBox="0 0 48 48" className={className} fill="none" stroke="currentColor" strokeWidth="1.4">
-    <rect x="16" y="4" width="16" height="16" transform="rotate(45 24 12)" />
-    <rect x="16" y="28" width="16" height="16" transform="rotate(45 24 36)" />
-    <rect x="4"  y="16" width="16" height="16" transform="rotate(45 12 24)" />
-    <rect x="28" y="16" width="16" height="16" transform="rotate(45 36 24)" />
-    <circle cx="24" cy="24" r="3" fill="currentColor" stroke="none" />
+/* ── Алтайская боковая орнаментальная полоса ── */
+const SideBorder = ({ flip = false }: { flip?: boolean }) => (
+  <svg
+    viewBox="0 0 44 880"
+    className="absolute top-0 h-full w-11 pointer-events-none"
+    style={{ left: flip ? 'auto' : 0, right: flip ? 0 : 'auto', transform: flip ? 'scaleX(-1)' : 'none' }}
+    preserveAspectRatio="xMidYMid slice"
+  >
+    <rect x="0" y="0" width="44" height="880" fill="hsl(28,35%,28%)" fillOpacity="0.10"/>
+    <rect x="0" y="0" width="2.5" height="880" fill="hsl(28,40%,28%)" fillOpacity="0.65"/>
+    <rect x="6" y="0" width="0.8" height="880" fill="hsl(28,35%,32%)" fillOpacity="0.3"/>
+    {Array.from({length:22}).map((_,i) => {
+      const y = i * 40;
+      return (
+        <g key={i} transform={`translate(4,${y})`}>
+          <path d="M18,2 L34,18 L18,34 L2,18 Z" fill="hsl(28,38%,28%)" fillOpacity="0.20" stroke="hsl(28,38%,28%)" strokeWidth="0.7" strokeOpacity="0.45"/>
+          <path d="M18,9 L25,18 L18,27 L11,18 Z" fill="hsl(28,38%,26%)" fillOpacity="0.28"/>
+          <rect x="14" y="14" width="8" height="8" transform="rotate(45 18 18)" fill="hsl(28,38%,28%)" fillOpacity="0.15"/>
+          <circle cx="18" cy="18" r="2" fill="hsl(28,38%,25%)" fillOpacity="0.35"/>
+        </g>
+      );
+    })}
   </svg>
 );
 
-/* Угловой орнамент из эскиза */
-const Corner = ({ className = '' }: { className?: string }) => (
-  <svg viewBox="0 0 56 56" className={className} fill="none" stroke="currentColor" strokeWidth="1.2">
-    <path d="M4 4 H20 V8 H8 V20 H4 Z" />
-    <rect x="10" y="10" width="8" height="8" transform="rotate(45 14 14)" />
-    <path d="M4 4 L14 14" />
+/* ── Летящий беркут SVG ── */
+const Eagle = ({ x, y, scale = 1, opacity = 0.5 }: { x: number; y: number; scale?: number; opacity?: number }) => (
+  <g transform={`translate(${x},${y}) scale(${scale})`} opacity={opacity}>
+    {/* тело */}
+    <ellipse cx="0" cy="0" rx="10" ry="4.5" fill="hsl(28,28%,22%)"/>
+    {/* голова */}
+    <ellipse cx="11" cy="-3" rx="5" ry="4" fill="hsl(28,28%,22%)"/>
+    {/* клюв крючком */}
+    <path d="M15,-2 Q20,-1 18,2 Q16,1 15,-2Z" fill="hsl(28,28%,18%)"/>
+    {/* левое крыло вверх */}
+    <path d="M-2,-2 C-14,-16 -28,-22 -44,-18 C-32,-12 -18,-6 -8,0Z" fill="hsl(28,26%,25%)"/>
+    {/* перья левого крыла */}
+    <path d="M-30,-19 C-28,-12 -24,-6 -18,-2" stroke="hsl(28,25%,32%)" strokeWidth="0.7" fill="none" opacity="0.7"/>
+    <path d="M-38,-17 C-36,-10 -30,-4 -22,-1" stroke="hsl(28,25%,32%)" strokeWidth="0.6" fill="none" opacity="0.5"/>
+    {/* правое крыло вниз */}
+    <path d="M-2,2 C-10,14 -22,22 -38,26 C-28,18 -14,10 -4,4Z" fill="hsl(28,26%,25%)"/>
+    {/* хвост */}
+    <path d="M-10,1 C-16,6 -20,12 -18,18 C-14,10 -10,5 -10,1Z" fill="hsl(28,26%,23%)"/>
+    <path d="M-11,2 C-18,8 -22,14 -21,20 C-16,12 -12,6 -11,2Z" fill="hsl(28,26%,23%)"/>
+  </g>
+);
+
+/* ── Горный пейзаж SVG ── */
+const Mountains = () => (
+  <svg viewBox="0 0 375 320" className="absolute bottom-0 left-0 w-full" style={{height:'50%'}}
+       preserveAspectRatio="xMidYMax meet">
+    <defs>
+      <linearGradient id="gFar" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="hsl(215,14%,80%)"/>
+        <stop offset="100%" stopColor="hsl(210,10%,72%)"/>
+      </linearGradient>
+      <linearGradient id="gMid" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="hsl(200,10%,65%)"/>
+        <stop offset="100%" stopColor="hsl(195,8%,56%)"/>
+      </linearGradient>
+      <linearGradient id="gNear" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="hsl(35,12%,54%)"/>
+        <stop offset="100%" stopColor="hsl(32,14%,44%)"/>
+      </linearGradient>
+      <linearGradient id="gFront" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="hsl(30,15%,44%)"/>
+        <stop offset="100%" stopColor="hsl(28,16%,34%)"/>
+      </linearGradient>
+      <filter id="blurFar"><feGaussianBlur stdDeviation="2.5"/></filter>
+      <filter id="blurMid"><feGaussianBlur stdDeviation="1.2"/></filter>
+    </defs>
+    {/* Дальние горы */}
+    <path d="M0,320 L0,180 C40,160 70,170 95,140 C118,114 138,128 162,96 C182,70 200,85 225,65 C248,46 268,62 292,52 C312,42 338,56 375,48 L375,320Z"
+          fill="url(#gFar)" opacity="0.55" filter="url(#blurFar)"/>
+    {/* Снег дальних пиков */}
+    <path d="M162,96 C168,86 175,88 180,82 C175,96 164,100 162,96Z" fill="white" opacity="0.5" filter="url(#blurFar)"/>
+    <path d="M225,65 C231,55 238,57 244,51 C239,65 227,68 225,65Z" fill="white" opacity="0.55" filter="url(#blurFar)"/>
+    <path d="M292,52 C298,43 304,45 309,40 C305,53 293,56 292,52Z" fill="white" opacity="0.45" filter="url(#blurFar)"/>
+    {/* Туман 1 */}
+    <path d="M0,320 L0,220 Q188,198 375,215 L375,320Z" fill="hsl(44,38%,90%)" opacity="0.5" filter="url(#blurFar)"/>
+    {/* Средние горы */}
+    <path d="M0,320 L0,230 C28,215 55,224 78,200 C100,178 122,190 148,166 C168,148 188,158 210,138 C230,120 252,132 274,118 C294,106 318,116 345,108 C358,104 368,108 375,106 L375,320Z"
+          fill="url(#gMid)" opacity="0.72" filter="url(#blurMid)"/>
+    <path d="M148,166 C154,157 160,159 165,153 C161,166 150,170 148,166Z" fill="white" opacity="0.38"/>
+    <path d="M210,138 C216,128 222,130 227,125 C223,138 212,142 210,138Z" fill="white" opacity="0.4"/>
+    {/* Туман 2 */}
+    <path d="M0,320 L0,262 Q188,246 375,260 L375,320Z" fill="hsl(42,34%,88%)" opacity="0.55" filter="url(#blurMid)"/>
+    {/* Ближние горы */}
+    <path d="M0,320 L0,275 C25,260 52,268 78,252 C102,237 126,246 152,232 C174,220 196,228 220,216 C242,205 264,212 288,202 C308,193 332,200 358,195 C365,193 371,195 375,194 L375,320Z"
+          fill="url(#gNear)" opacity="0.82"/>
+    {/* Передний план */}
+    <path d="M0,320 L0,295 C30,284 62,290 95,280 C128,270 160,278 192,268 C224,258 256,266 288,258 C318,250 348,256 375,252 L375,320Z"
+          fill="url(#gFront)" opacity="0.9"/>
+    {/* Туман у подножия */}
+    <path d="M0,320 L0,304 Q188,292 375,304 L375,320Z" fill="hsl(40,30%,85%)" opacity="0.65"/>
   </svg>
 );
 
-/* Полоска-разделитель с ромбом */
-const Sep = ({ light = false }: { light?: boolean }) => {
-  const c = light ? 'bg-[hsl(var(--parch))]/60' : 'bg-[hsl(var(--gold))]/60';
-  return (
-    <div className="flex items-center justify-center gap-3 my-6">
-      <span className={`h-px w-14 ${c}`} />
-      <svg viewBox="0 0 12 12" className={`w-3 h-3 ${light ? 'text-[hsl(var(--parch))]' : 'text-gold'}`} fill="currentColor">
-        <polygon points="6,0 12,6 6,12 0,6" />
-      </svg>
-      <span className={`h-px w-14 ${c}`} />
-    </div>
-  );
-};
-
-/* Четыре угловых орнамента */
-const Corners = ({ light = false }: { light?: boolean }) => {
-  const c = light ? 'text-[hsl(var(--parch))]/50' : 'text-[hsl(var(--gold))]/55';
-  return (
-    <>
-      <Corner className={`absolute top-4 left-4 w-14 h-14 ${c}`} />
-      <Corner className={`absolute top-4 right-4 w-14 h-14 ${c} -scale-x-100`} />
-      <Corner className={`absolute bottom-4 left-4 w-14 h-14 ${c} -scale-y-100`} />
-      <Corner className={`absolute bottom-4 right-4 w-14 h-14 ${c} scale-[-1]`} />
-    </>
-  );
-};
-
-/* Птицы SVG (декоративные, как на эскизе) */
-const Birds = ({ className = '' }: { className?: string }) => (
-  <svg viewBox="0 0 120 40" className={className} fill="currentColor">
-    <path d="M10 20 Q14 14 18 20 Q14 18 10 20Z" />
-    <path d="M22 15 Q27 8 32 15 Q27 12 22 15Z" />
-    <path d="M38 22 Q42 16 46 22 Q42 20 38 22Z" />
-    <path d="M70 18 Q75 11 80 18 Q75 15 70 18Z" />
-    <path d="M85 12 Q90 5 95 12 Q90 9 85 12Z" />
+/* ── Алтайский центральный орнамент ── */
+const AltaiStar = ({ size = 64 }: { size?: number }) => (
+  <svg viewBox="0 0 64 64" width={size} height={size} fill="none">
+    {[0,45,90,135,180,225,270,315].map((a,i) => {
+      const r1=28, r2=20, mid=a+22.5;
+      const x1=32+r2*Math.cos((a-22.5)*Math.PI/180), y1=32+r2*Math.sin((a-22.5)*Math.PI/180);
+      const xm=32+r1*Math.cos(a*Math.PI/180),        ym=32+r1*Math.sin(a*Math.PI/180);
+      const x2=32+r2*Math.cos((a+22.5)*Math.PI/180), y2=32+r2*Math.sin((a+22.5)*Math.PI/180);
+      void mid;
+      return <path key={i} d={`M32,32 L${x1},${y1} Q${xm},${ym} ${x2},${y2}Z`}
+               fill="hsl(28,38%,28%)" fillOpacity={i%2===0?0.5:0.28}/>;
+    })}
+    <path d="M32,18 L46,32 L32,46 L18,32 Z" stroke="hsl(28,38%,28%)" strokeWidth="1" fill="hsl(28,38%,28%)" fillOpacity="0.10"/>
+    <path d="M32,24 L40,32 L32,40 L24,32 Z" fill="hsl(28,38%,28%)" fillOpacity="0.38"/>
+    <circle cx="32" cy="32" r="4" fill="hsl(28,38%,25%)" fillOpacity="0.7"/>
   </svg>
 );
 
-/* Горный силуэт (как на эскизе слайда 1) */
-const Mountains = ({ className = '' }: { className?: string }) => (
-  <svg viewBox="0 0 200 80" className={className} fill="currentColor">
-    <polygon points="0,80 40,30 60,50 90,10 120,45 150,20 180,40 200,80" />
+/* ── Разделитель с ветками ── */
+const Branch = () => (
+  <svg viewBox="0 0 280 28" width={260} height={28} fill="none" stroke="hsl(28,35%,33%)">
+    <path d="M140,14 L132,8 L124,14 L132,20Z" fill="hsl(28,38%,30%)" fillOpacity="0.6" strokeWidth="0"/>
+    <line x1="122" y1="14" x2="14" y2="14" strokeWidth="0.8" strokeOpacity="0.4"/>
+    <path d="M14,14 L22,9 M14,14 L22,19" strokeWidth="1.1" strokeOpacity="0.5"/>
+    {[100,80,60,40].map(x=>(
+      <g key={x}>
+        <path d={`M${x},14 Q${x-5},9 ${x-9},7`} strokeWidth="0.9" strokeOpacity="0.4"/>
+        <path d={`M${x},14 Q${x-5},19 ${x-9},21`} strokeWidth="0.9" strokeOpacity="0.4"/>
+      </g>
+    ))}
+    <line x1="158" y1="14" x2="266" y2="14" strokeWidth="0.8" strokeOpacity="0.4"/>
+    <path d="M266,14 L258,9 M266,14 L258,19" strokeWidth="1.1" strokeOpacity="0.5"/>
+    {[180,200,220,240].map(x=>(
+      <g key={x}>
+        <path d={`M${x},14 Q${x+5},9 ${x+9},7`} strokeWidth="0.9" strokeOpacity="0.4"/>
+        <path d={`M${x},14 Q${x+5},19 ${x+9},21`} strokeWidth="0.9" strokeOpacity="0.4"/>
+      </g>
+    ))}
   </svg>
 );
 
-/* ═══════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════ */
 const Index = () => {
   const [opened, setOpened] = useState(false);
+  const [revealed, setRevealed] = useState(false);
+  const [eagleX, setEagleX] = useState(-60);
+  const [eagle2X, setEagle2X] = useState(-160);
+  const [music, setMusic] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  /* Анимация беркутов */
+  useEffect(() => {
+    let x1 = -60, x2 = -160;
+    const id = setInterval(() => {
+      x1 = x1 > 420 ? -100 : x1 + 0.4;
+      x2 = x2 > 420 ? -180 : x2 + 0.25;
+      setEagleX(x1);
+      setEagle2X(x2);
+    }, 30);
+    return () => clearInterval(id);
+  }, []);
+
+  /* Открытие с задержкой для анимации */
+  const handleOpen = () => {
+    setOpened(true);
+    setTimeout(() => setRevealed(true), 50);
+  };
+
+  const toggleMusic = () => {
+    if (!audioRef.current) return;
+    if (music) { audioRef.current.pause(); setMusic(false); }
+    else { audioRef.current.play().catch(()=>{}); setMusic(true); }
+  };
+
+  const C = 'hsl(28,30%,20%)';
+  const GOLD = 'hsl(32,42%,38%)';
+  const BG = 'linear-gradient(180deg, hsl(46,42%,94%) 0%, hsl(42,36%,88%) 50%, hsl(38,30%,82%) 100%)';
 
   return (
-    <div style={{ fontFamily: "'Cormorant', serif" }}
-         className="bg-[hsl(var(--parch))] text-[hsl(var(--deep))]">
+    <div style={{ fontFamily:"'Cormorant',serif", background:'hsl(42,35%,90%)' }}>
 
-      {/* ══ СЛАЙД 1: Стартовый ══ */}
+      {/* ═══ ЭКРАН 1: Стартовый ═══ */}
       {!opened && (
-        <section
-          onClick={() => setOpened(true)}
+        <section onClick={handleOpen}
           className="fixed inset-0 z-50 cursor-pointer overflow-hidden flex flex-col"
-          style={{ background: 'linear-gradient(180deg, hsl(46,45%,95%) 0%, hsl(42,38%,89%) 45%, hsl(38,32%,82%) 100%)' }}
-        >
-          {/* ═══ БОКОВЫЕ ОРНАМЕНТЫ — алтайский плетёный бордюр на весь экран ═══ */}
-          {/* Левая полоса */}
-          <svg viewBox="0 0 44 880" className="absolute top-0 left-0 h-full w-11" style={{filter:'none'}}
-               preserveAspectRatio="xMidYMid slice" fill="none">
-            <rect x="0" y="0" width="44" height="880" fill="hsl(28,35%,28%)" fillOpacity="0.12"/>
-            <rect x="0" y="0" width="2.5" height="880" fill="hsl(28,40%,30%)" fillOpacity="0.7"/>
-            <rect x="40" y="0" width="1" height="880" fill="hsl(28,35%,35%)" fillOpacity="0.3"/>
-            {/* Алтайский узор — повторяющийся блок 44×44: крест + ромбы */}
-            {Array.from({length:22}).map((_,i)=>{
-              const y = i*40;
-              return (
-                <g key={i} transform={`translate(4,${y})`}>
-                  {/* большой ромб */}
-                  <path d="M18,2 L34,18 L18,34 L2,18 Z" fill="hsl(28,38%,28%)" fillOpacity="0.22" stroke="hsl(28,38%,28%)" strokeWidth="0.8" strokeOpacity="0.5"/>
-                  {/* внутренний малый ромб */}
-                  <path d="M18,9 L25,18 L18,27 L11,18 Z" fill="hsl(28,38%,28%)" fillOpacity="0.3" stroke="none"/>
-                  {/* четыре угловых квадратика */}
-                  <rect x="14" y="14" width="8" height="8" transform="rotate(45 18 18)" fill="hsl(28,38%,28%)" fillOpacity="0.18"/>
-                  {/* крестообразные линии */}
-                  <line x1="18" y1="2" x2="18" y2="34" stroke="hsl(28,38%,30%)" strokeWidth="0.5" strokeOpacity="0.25"/>
-                  <line x1="2" y1="18" x2="34" y2="18" stroke="hsl(28,38%,30%)" strokeWidth="0.5" strokeOpacity="0.25"/>
-                </g>
-              );
-            })}
-          </svg>
-          {/* Правая полоса — зеркало */}
-          <svg viewBox="0 0 44 880" className="absolute top-0 right-0 h-full w-11"
-               preserveAspectRatio="xMidYMid slice" fill="none" style={{transform:'scaleX(-1)'}}>
-            <rect x="0" y="0" width="44" height="880" fill="hsl(28,35%,28%)" fillOpacity="0.12"/>
-            <rect x="0" y="0" width="2.5" height="880" fill="hsl(28,40%,30%)" fillOpacity="0.7"/>
-            <rect x="40" y="0" width="1" height="880" fill="hsl(28,35%,35%)" fillOpacity="0.3"/>
-            {Array.from({length:22}).map((_,i)=>{
-              const y = i*40;
-              return (
-                <g key={i} transform={`translate(4,${y})`}>
-                  <path d="M18,2 L34,18 L18,34 L2,18 Z" fill="hsl(28,38%,28%)" fillOpacity="0.22" stroke="hsl(28,38%,28%)" strokeWidth="0.8" strokeOpacity="0.5"/>
-                  <path d="M18,9 L25,18 L18,27 L11,18 Z" fill="hsl(28,38%,28%)" fillOpacity="0.3" stroke="none"/>
-                  <rect x="14" y="14" width="8" height="8" transform="rotate(45 18 18)" fill="hsl(28,38%,28%)" fillOpacity="0.18"/>
-                  <line x1="18" y1="2" x2="18" y2="34" stroke="hsl(28,38%,30%)" strokeWidth="0.5" strokeOpacity="0.25"/>
-                  <line x1="2" y1="18" x2="34" y2="18" stroke="hsl(28,38%,30%)" strokeWidth="0.5" strokeOpacity="0.25"/>
-                </g>
-              );
-            })}
+          style={{ background: BG }}>
+
+          <SideBorder/>
+          <SideBorder flip/>
+
+          {/* Беркуты летят */}
+          <svg className="absolute top-0 left-0 w-full pointer-events-none" style={{height:'38%'}} viewBox="0 0 375 160" preserveAspectRatio="xMidYMid meet">
+            <Eagle x={eagleX} y={48} scale={1.1} opacity={0.42}/>
+            <Eagle x={eagle2X} y={28} scale={0.68} opacity={0.28}/>
           </svg>
 
-          {/* ═══ ГОРЫ — многослойный реалистичный пейзаж, нижняя половина ═══ */}
-          <svg viewBox="0 0 375 480" className="absolute bottom-0 left-0 w-full" style={{height:'58%'}}
-               preserveAspectRatio="xMidYMax meet">
-            <defs>
-              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(44,42%,93%)" stopOpacity="0"/>
-                <stop offset="100%" stopColor="hsl(38,30%,84%)" stopOpacity="0.8"/>
-              </linearGradient>
-              <linearGradient id="far" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(220,12%,82%)"/>
-                <stop offset="100%" stopColor="hsl(210,10%,75%)"/>
-              </linearGradient>
-              <linearGradient id="mid" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(200,8%,70%)"/>
-                <stop offset="100%" stopColor="hsl(195,8%,60%)"/>
-              </linearGradient>
-              <linearGradient id="near" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(35,12%,58%)"/>
-                <stop offset="100%" stopColor="hsl(32,14%,48%)"/>
-              </linearGradient>
-              <linearGradient id="front" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(30,15%,48%)"/>
-                <stop offset="100%" stopColor="hsl(28,16%,38%)"/>
-              </linearGradient>
-              <filter id="blur1"><feGaussianBlur stdDeviation="2"/></filter>
-              <filter id="blur2"><feGaussianBlur stdDeviation="1"/></filter>
-            </defs>
+          <Mountains/>
 
-            {/* Слой 1: самые дальние горы — почти белые, размытые */}
-            <path d="M0,480 L0,260 C30,240 50,255 70,220 C90,185 110,200 135,160 C155,128 170,145 195,110 C215,82 235,100 260,75 C280,55 300,72 320,60 C340,45 360,58 375,52 L375,480 Z"
-                  fill="url(#far)" opacity="0.6" filter="url(#blur1)"/>
-            {/* Снег дальних пиков */}
-            <path d="M135,160 C142,150 148,152 155,145 C150,158 140,162 135,160Z" fill="white" opacity="0.55" filter="url(#blur1)"/>
-            <path d="M195,110 C202,100 210,102 218,96 C212,112 200,116 195,110Z" fill="white" opacity="0.6" filter="url(#blur1)"/>
-            <path d="M260,75 C267,65 274,67 280,62 C275,76 263,79 260,75Z" fill="white" opacity="0.5" filter="url(#blur1)"/>
-
-            {/* Туман между слоями 1 и 2 */}
-            <path d="M0,480 L0,310 Q95,280 190,295 Q285,310 375,290 L375,480Z"
-                  fill="hsl(44,38%,90%)" opacity="0.45" filter="url(#blur1)"/>
-
-            {/* Слой 2: средние горы */}
-            <path d="M0,480 L0,320 C20,305 45,315 65,285 C85,258 105,270 130,240 C150,216 170,228 195,200 C215,178 238,190 258,168 C278,148 298,162 322,148 C342,136 360,150 375,144 L375,480 Z"
-                  fill="url(#mid)" opacity="0.7" filter="url(#blur2)"/>
-            <path d="M130,240 C137,230 144,232 150,226 C145,240 133,244 130,240Z" fill="white" opacity="0.4"/>
-            <path d="M258,168 C264,158 270,160 276,155 C272,168 260,172 258,168Z" fill="white" opacity="0.38"/>
-
-            {/* Туман между слоями 2 и 3 */}
-            <path d="M0,480 L0,360 Q95,340 190,352 Q285,365 375,348 L375,480Z"
-                  fill="hsl(44,35%,88%)" opacity="0.5" filter="url(#blur2)"/>
-
-            {/* Слой 3: ближние горы */}
-            <path d="M0,480 L0,375 C22,358 48,368 72,345 C96,322 118,336 145,312 C165,294 188,306 212,285 C232,267 255,278 278,260 C298,244 320,255 345,242 C360,234 370,240 375,238 L375,480 Z"
-                  fill="url(#near)" opacity="0.8"/>
-            <path d="M145,312 C152,302 158,304 164,298 C160,312 148,316 145,312Z" fill="white" opacity="0.3"/>
-
-            {/* Слой 4: передние холмы — самые тёмные */}
-            <path d="M0,480 L0,420 C30,405 60,415 90,400 C120,386 150,396 180,382 C210,368 240,378 270,368 C300,356 330,366 360,358 C368,355 372,357 375,356 L375,480 Z"
-                  fill="url(#front)" opacity="0.85"/>
-
-            {/* Туман у подножия */}
-            <path d="M0,480 L0,440 Q190,420 375,438 L375,480Z"
-                  fill="hsl(42,32%,86%)" opacity="0.6"/>
-          </svg>
-
-          {/* ═══ КОНТЕНТ ═══ */}
-          <div className="relative z-10 flex flex-col items-center justify-between h-full py-10 px-14 text-center">
-
-            {/* Орлы — вверху справа, красивые силуэты */}
-            <div className="w-full flex justify-end -mt-1">
-              <svg viewBox="0 0 180 100" className="w-44 h-24" fill="none">
-                {/* Орёл 1 крупный */}
-                <g opacity="0.45">
-                  {/* тело обтекаемое */}
-                  <path d="M95,42 C98,36 104,34 108,36 C112,38 112,44 108,46 C104,48 98,46 95,42Z"
-                        fill="hsl(28,30%,25%)"/>
-                  {/* голова с клювом */}
-                  <path d="M108,36 C113,32 118,33 120,36 C122,39 119,42 115,41 C111,40 108,38 108,36Z"
-                        fill="hsl(28,30%,25%)"/>
-                  <path d="M120,36 L128,38 L121,40Z" fill="hsl(28,30%,20%)"/>
-                  {/* левое крыло — широкое, загнутое */}
-                  <path d="M100,40 C90,32 74,20 55,12 C48,9 40,8 35,10 C50,18 64,26 74,34 C80,38 88,40 95,42Z"
-                        fill="hsl(28,28%,28%)"/>
-                  {/* перья левого крыла */}
-                  <path d="M55,12 C52,18 56,24 60,28" stroke="hsl(28,25%,35%)" strokeWidth="0.8" fill="none" opacity="0.6"/>
-                  <path d="M45,12 C42,18 46,24 50,28" stroke="hsl(28,25%,35%)" strokeWidth="0.7" fill="none" opacity="0.5"/>
-                  {/* правое крыло — опущено вниз */}
-                  <path d="M100,44 C92,52 78,62 62,70 C55,73 48,74 44,72 C58,64 72,56 82,48 C88,44 94,42 100,44Z"
-                        fill="hsl(28,28%,28%)"/>
-                  {/* перья правого крыла */}
-                  <path d="M62,70 C60,64 64,58 68,54" stroke="hsl(28,25%,35%)" strokeWidth="0.8" fill="none" opacity="0.6"/>
-                  {/* хвост */}
-                  <path d="M94,44 C88,50 82,56 78,62 C82,54 88,48 94,44Z" fill="hsl(28,28%,26%)"/>
-                  <path d="M92,46 C85,53 80,59 76,65 C80,57 86,51 92,46Z" fill="hsl(28,28%,26%)"/>
-                </g>
-
-                {/* Орёл 2 — маленький, вдали */}
-                <g opacity="0.28" transform="translate(20,-8) scale(0.5)">
-                  <path d="M95,42 C98,36 104,34 108,36 C112,38 112,44 108,46 C104,48 98,46 95,42Z" fill="hsl(28,30%,30%)"/>
-                  <path d="M108,36 C113,32 118,33 120,36 C122,39 119,42 115,41 C111,40 108,38 108,36Z" fill="hsl(28,30%,30%)"/>
-                  <path d="M120,36 L128,38 L121,40Z" fill="hsl(28,30%,25%)"/>
-                  <path d="M100,40 C90,32 74,20 55,12 C48,9 40,8 35,10 C50,18 64,26 74,34 C80,38 88,40 95,42Z" fill="hsl(28,28%,32%)"/>
-                  <path d="M100,44 C92,52 78,62 62,70 C55,73 48,74 44,72 C58,64 72,56 82,48 C88,44 94,42 100,44Z" fill="hsl(28,28%,32%)"/>
-                  <path d="M94,44 C88,50 82,56 78,62 C82,54 88,48 94,44Z" fill="hsl(28,28%,28%)"/>
-                </g>
-              </svg>
-            </div>
-
-            {/* Алтайский узор + имена */}
-            <div className="flex flex-col items-center">
-              {/* Узор — алтайский «солнечный» мотив */}
-              <svg viewBox="0 0 72 72" className="w-14 h-14 mb-3" fill="none">
-                {/* внешнее кольцо с лепестками */}
-                {[0,45,90,135,180,225,270,315].map((a,i)=>(
-                  <path key={i}
-                    d={`M36,36 L${36+20*Math.cos((a-22.5)*Math.PI/180)},${36+20*Math.sin((a-22.5)*Math.PI/180)} Q${36+26*Math.cos(a*Math.PI/180)},${36+26*Math.sin(a*Math.PI/180)} ${36+20*Math.cos((a+22.5)*Math.PI/180)},${36+20*Math.sin((a+22.5)*Math.PI/180)} Z`}
-                    fill="hsl(28,38%,30%)" fillOpacity={i%2===0?0.45:0.25}/>
-                ))}
-                {/* средний ромб */}
-                <path d="M36,22 L50,36 L36,50 L22,36 Z" stroke="hsl(28,38%,30%)" strokeWidth="1.2" fill="hsl(28,38%,30%)" fillOpacity="0.12"/>
-                {/* внутренний крест */}
-                <path d="M36,28 L44,36 L36,44 L28,36 Z" fill="hsl(28,38%,30%)" fillOpacity="0.35"/>
-                <circle cx="36" cy="36" r="4" fill="hsl(28,38%,28%)" fillOpacity="0.6"/>
-              </svg>
-
-              <h1 style={{ fontFamily:"'Cormorant',serif", fontSize:'clamp(3rem,13vw,5.2rem)', color:'hsl(28,30%,18%)', lineHeight:1.05 }}>
+          {/* Контент */}
+          <div className="relative z-10 flex flex-col items-center justify-between h-full py-10 px-12 text-center">
+            <div/>
+            <div className="flex flex-col items-center gap-1">
+              <AltaiStar size={52}/>
+              <h1 style={{fontSize:'clamp(3rem,13vw,5.2rem)', color:C, lineHeight:1.05, marginTop:8}}>
                 Аэлита
               </h1>
-              <span style={{ fontFamily:"'Cormorant',serif", fontSize:'clamp(1.8rem,7vw,3rem)', color:'hsl(32,40%,38%)', fontStyle:'italic', lineHeight:1.1 }}>
+              <span style={{fontSize:'clamp(2rem,8vw,3rem)', color:GOLD, fontStyle:'italic', lineHeight:1}}>
                 &amp;
               </span>
-              <h1 style={{ fontFamily:"'Cormorant',serif", fontSize:'clamp(3rem,13vw,5.2rem)', color:'hsl(28,30%,18%)', lineHeight:1.05 }}>
+              <h1 style={{fontSize:'clamp(3rem,13vw,5.2rem)', color:C, lineHeight:1.05}}>
                 Тузагаш
               </h1>
-
-              {/* Ветки с ромбом */}
-              <svg viewBox="0 0 280 28" className="w-64 mt-5" fill="none" stroke="hsl(28,35%,33%)">
-                <path d="M140,14 L132,8 L124,14 L132,20 Z" fill="hsl(28,38%,32%)" fillOpacity="0.6" strokeWidth="0"/>
-                <line x1="122" y1="14" x2="14" y2="14" strokeWidth="0.8" strokeOpacity="0.4"/>
-                <path d="M14,14 L22,9 M14,14 L22,19" strokeWidth="1.2" strokeOpacity="0.5"/>
-                {[100,80,60,40].map(x=>(
-                  <g key={x}>
-                    <path d={`M${x},14 Q${x-6},9 ${x-10},7`} strokeWidth="0.9" strokeOpacity="0.4"/>
-                    <path d={`M${x},14 Q${x-6},19 ${x-10},21`} strokeWidth="0.9" strokeOpacity="0.4"/>
-                  </g>
-                ))}
-                <line x1="158" y1="14" x2="266" y2="14" strokeWidth="0.8" strokeOpacity="0.4"/>
-                <path d="M266,14 L258,9 M266,14 L258,19" strokeWidth="1.2" strokeOpacity="0.5"/>
-                {[180,200,220,240].map(x=>(
-                  <g key={x}>
-                    <path d={`M${x},14 Q${x+6},9 ${x+10},7`} strokeWidth="0.9" strokeOpacity="0.4"/>
-                    <path d={`M${x},14 Q${x+6},19 ${x+10},21`} strokeWidth="0.9" strokeOpacity="0.4"/>
-                  </g>
-                ))}
-              </svg>
+              <div style={{marginTop:12}}>
+                <Branch/>
+              </div>
+              <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'clamp(0.75rem,3.2vw,0.95rem)', color:GOLD, letterSpacing:'0.05em', marginTop:8, fontWeight:400}}>
+                Јӱректерди Алтай јараштырат
+              </p>
+              <p style={{fontFamily:"'Golos Text',sans-serif", fontSize:'11px', color:C, opacity:0.5, marginTop:2}}>
+                «Алтай соединяет сердца»
+              </p>
             </div>
 
-            {/* Подпись снизу */}
-            <div className="flex flex-col items-center gap-1 pb-2 animate-float">
-              <svg viewBox="0 0 48 34" className="w-11 mb-1" fill="none" stroke="hsl(28,35%,36%)" strokeWidth="1.6">
-                <path d="M4,30 C10,22 16,14 22,10 C26,7 28,9 30,14 C32,9 36,4 42,2 C46,6 48,10 44,30" strokeLinejoin="round"/>
-                <path d="M4,30 L44,30" strokeWidth="1"/>
-                <path d="M22,10 L18,16 L26,16 Z" fill="hsl(28,35%,36%)" fillOpacity="0.35" strokeWidth="0"/>
-              </svg>
-              <p style={{ fontFamily:"'Oswald',sans-serif", fontSize:'10px', letterSpacing:'0.22em', color:'hsl(28,22%,32%)', opacity:0.65, textTransform:'uppercase' }}>
+            {/* Подпись */}
+            <div className="flex flex-col items-center gap-1 animate-float">
+              <span style={{fontSize:26}}>👇</span>
+              <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'10px', letterSpacing:'0.22em', color:C, opacity:0.6, textTransform:'uppercase'}}>
                 Экранга тийип ачыгар
               </p>
-              <Icon name="ChevronDown" size={16} className="text-[hsl(32,40%,40%)]" />
             </div>
-
           </div>
         </section>
       )}
 
-      {/* ══ СЛАЙД 2: Благопожелание + костёр ══ */}
-      <section
-        className="relative w-full h-screen flex flex-col items-center justify-center text-center px-8 overflow-hidden"
-        style={{ background: 'linear-gradient(160deg, hsl(42,38%,93%) 0%, hsl(38,30%,85%) 100%)' }}
-      >
-        <Corners />
-        {/* Иллюстрация костра занимает нижнюю часть */}
-        <div className="absolute bottom-0 left-0 right-0 h-[45%]">
-          <img src={IMG_FIRE} alt="" className="w-full h-full object-cover object-top opacity-60" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[hsl(42,38%,93%)]/0 via-transparent to-[hsl(42,38%,93%)]" />
+      {/* ═══ КНОПКА МУЗЫКИ ═══ */}
+      {opened && (
+        <button onClick={toggleMusic}
+          className="fixed top-4 right-4 z-50 flex items-center gap-2 px-3 py-2 rounded-full"
+          style={{background:'hsl(42,35%,88%)', border:'1px solid hsl(28,35%,55%)', boxShadow:'0 2px 8px rgba(0,0,0,0.15)'}}>
+          <span style={{fontSize:16}}>{music ? '🔊' : '🔇'}</span>
+          <span style={{fontFamily:"'Oswald',sans-serif", fontSize:'10px', letterSpacing:'0.15em', color:C, opacity:0.7}}>
+            МУЗЫКА
+          </span>
+        </button>
+      )}
+      <audio ref={audioRef} loop>
+        {/* Подключи алтайскую музыку сюда */}
+      </audio>
+
+      {/* ═══ ЭКРАН 2: Стихотворение + очаг ═══ */}
+      <section className="relative w-full h-screen overflow-hidden flex flex-col items-center justify-center text-center px-10"
+        style={{background: BG}}>
+        <SideBorder/><SideBorder flip/>
+
+        {/* Иллюстрация очага снизу */}
+        <div className="absolute bottom-0 left-0 right-0 h-2/5">
+          <img src={IMG_FIRE} alt="" className="w-full h-full object-cover object-top" style={{opacity:0.5}}/>
+          <div className="absolute inset-0" style={{background:'linear-gradient(to bottom, hsl(44,40%,92%) 0%, transparent 60%)'}}/>
         </div>
 
-        <div className="relative z-10 flex flex-col items-center">
-          <Knot className="w-8 h-8 text-[hsl(var(--gold))] mb-8" />
-          <p className="text-xl sm:text-3xl leading-relaxed text-[hsl(var(--deep))] max-w-sm">
-            Јайдыҥ јараш кӱнинде,<br />
-            Јаҥы кӱйген очокко,<br />
-            Јаҥарлап кожоҥ јайыгар,<br />
+        <div className="relative z-10 flex flex-col items-center" style={{
+          opacity: revealed ? 1 : 0,
+          transform: revealed ? 'translateY(0)' : 'translateY(30px)',
+          transition: 'all 1.2s cubic-bezier(0.16,1,0.3,1)'
+        }}>
+          <AltaiStar size={40}/>
+          <p style={{fontSize:'clamp(1.2rem,5vw,1.7rem)', color:C, lineHeight:1.9, marginTop:20, fontStyle:'italic'}}>
+            Јайдыҥ јараш кӱӱнинде,<br/>
+            Јаҥы кӱйген очокко,<br/>
+            Јаҥарлап кожоҥ јайыгар,<br/>
             Јараш алкыштар айдыгар.
           </p>
-          <Sep />
-          <p className="text-base sm:text-xl leading-relaxed text-[hsl(var(--deep))]/75"
-             style={{ fontFamily: "'Oswald', sans-serif", letterSpacing: '0.04em' }}>
-            Бистиҥ кудабыска<br />акту јӱрегистеҥ<br />кычырып турубыс
+          <Branch/>
+          <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'clamp(0.85rem,3.5vw,1.05rem)', color:C, opacity:0.75, lineHeight:1.8, marginTop:8}}>
+            Бистиҥ кудабыска<br/>акту јӱрегистеҥ кычырып турубыс
           </p>
+          <div className="mt-6 flex flex-col items-center gap-1">
+            <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'11px', color:GOLD, letterSpacing:'0.2em', textTransform:'uppercase'}}>
+              Јаҥы очоктыҥ башталганы
+            </p>
+            <p style={{fontFamily:"'Golos Text',sans-serif", fontSize:'10px', color:C, opacity:0.45}}>
+              Начало нового очага
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* ══ СЛАЙД 3: Пара в национальных костюмах ══ */}
+      {/* ═══ ЭКРАН 3: Молодожёны на фоне Алтая ═══ */}
       <section className="relative w-full h-screen overflow-hidden flex items-end justify-center">
-        <img src={IMG_COUPLE} alt="" className="absolute inset-0 w-full h-full object-cover animate-pan" />
-        {/* Градиент снизу, как на эскизе — белая арка с именами */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(42,38%,92%)] via-[hsl(42,38%,92%)]/10 to-transparent" />
-
-        {/* Арочный блок с именами внизу */}
-        <div className="relative z-10 w-full pb-0">
-          <div
-            className="mx-auto w-[82%] sm:w-[70%] text-center pt-8 pb-10 px-8 rounded-t-full"
-            style={{ background: 'hsl(42,38%,92%)', boxShadow: '0 -4px 30px hsla(36,30%,30%,0.12)' }}
-          >
-            <Knot className="w-7 h-7 text-[hsl(var(--gold))] mx-auto mb-3" />
-            <Sep />
-            <h2 className="text-4xl sm:text-5xl leading-tight text-[hsl(var(--deep))]">
-              Аэлита<br />
-              <span className="text-[hsl(var(--gold))] italic text-3xl">&amp;</span><br />
-              Тузагаш
-            </h2>
-          </div>
+        <img src={IMG_COUPLE} alt="" className="absolute inset-0 w-full h-full object-cover animate-pan"/>
+        <div className="absolute inset-0" style={{background:'linear-gradient(to top, hsl(42,38%,90%) 0%, rgba(0,0,0,0.05) 55%, transparent 100%)'}}/>
+        <div className="relative z-10 w-full text-center pb-16 px-10">
+          <AltaiStar size={36}/>
+          <Branch/>
+          <h2 style={{fontFamily:"'Cormorant',serif", fontSize:'clamp(2.2rem,10vw,4rem)', color:C, lineHeight:1.1, marginTop:8}}>
+            Аэлита<br/>
+            <span style={{color:GOLD, fontStyle:'italic', fontSize:'0.75em'}}>&amp;</span><br/>
+            Тузагаш
+          </h2>
         </div>
       </section>
 
-      {/* ══ СЛАЙД 4: Текст приглашения ══ */}
-      <section
-        className="relative w-full h-screen flex flex-col items-center justify-center text-center px-8"
-        style={{ background: 'linear-gradient(160deg, hsl(42,38%,93%) 0%, hsl(38,30%,85%) 100%)' }}
-      >
-        <Corners />
-        <div className="flex flex-col items-center gap-0 max-w-sm">
-          {/* стрелки с ромбами как на эскизе */}
-          <div className="flex items-center justify-center gap-3 mb-8">
-            <span className="h-px w-10 bg-[hsl(var(--gold))]/50" />
-            <Knot className="w-6 h-6 text-[hsl(var(--gold))]" />
-            <span className="h-px w-10 bg-[hsl(var(--gold))]/50" />
-          </div>
-
-          {/* Ветви-листья (имитация декора эскиза) */}
-          <div className="text-[hsl(var(--gold))]/40 text-5xl mb-4 leading-none select-none">❧</div>
-
-          <p className="text-xl sm:text-2xl leading-relaxed text-[hsl(var(--deep))]">
-            Бистиҥ кудабыска<br />
-            акту јӱрегистеҥ<br />
-            кычырып турубыс
+      {/* ═══ ЭКРАН 4: Дата и время ═══ */}
+      <section className="relative w-full h-screen flex flex-col items-center justify-center text-center px-10"
+        style={{background: BG}}>
+        <SideBorder/><SideBorder flip/>
+        <div className="relative z-10 flex flex-col items-center gap-5 w-full max-w-xs">
+          <AltaiStar size={44}/>
+          <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'10px', letterSpacing:'0.3em', color:GOLD, textTransform:'uppercase', marginTop:4}}>
+            Бу кӱнге арткан
           </p>
-
-          <div className="text-[hsl(var(--gold))]/40 text-5xl mt-4 leading-none select-none rotate-180">❧</div>
-
-          <Sep />
-
-          {/* Стрелки снизу */}
-          <div className="flex items-center justify-center gap-3">
-            <span className="h-px w-10 bg-[hsl(var(--gold))]/50" />
-            <Knot className="w-6 h-6 text-[hsl(var(--gold))]" />
-            <span className="h-px w-10 bg-[hsl(var(--gold))]/50" />
-          </div>
-        </div>
-      </section>
-
-      {/* ══ СЛАЙД 5: О событии + обратный отсчёт ══ */}
-      <section
-        className="relative w-full h-screen flex flex-col items-center justify-center text-center px-8"
-        style={{ background: 'linear-gradient(160deg, hsl(42,38%,93%) 0%, hsl(38,30%,85%) 100%)' }}
-      >
-        <Corners />
-        {/* Горный значок сверху как на эскизе */}
-        <Mountains className="w-20 text-[hsl(var(--deep))]/20 mb-2" />
-        <Sep />
-
-        {/* Детали события */}
-        <div className="space-y-5 text-left w-full max-w-xs mb-6">
+          <Countdown/>
+          <Branch/>
+          {/* Детали */}
           {[
-            { icon: 'Calendar', text: '14.08.2026' },
-            { icon: 'Clock',    text: '16:00' },
-            { icon: 'MapPin',   text: '«Туштажу» кафе' },
-            { icon: 'Mountain', text: 'Кош-Агач' },
-          ].map((row) => (
-            <div key={row.text} className="flex items-center gap-4">
-              <span className="w-10 h-10 rounded-full border border-[hsl(var(--gold))]/50 flex items-center justify-center text-[hsl(var(--gold))] shrink-0">
-                <Icon name={row.icon} size={18} />
+            {icon:'Calendar', label:'14 августа 2026'},
+            {icon:'Clock',    label:'16:00'},
+          ].map(r=>(
+            <div key={r.label} className="flex items-center gap-4">
+              <span className="w-10 h-10 rounded-full flex items-center justify-center"
+                style={{border:'1px solid hsl(28,35%,50%)', color:GOLD}}>
+                <Icon name={r.icon} size={18}/>
               </span>
-              <span className="text-xl sm:text-2xl text-[hsl(var(--deep))]">{row.text}</span>
+              <span style={{fontSize:'clamp(1.3rem,6vw,2rem)', color:C}}>{r.label}</span>
             </div>
           ))}
         </div>
-
-        <Sep />
-        {/* Отсчёт */}
-        <p className="uppercase tracking-[0.3em] text-[10px] text-[hsl(var(--gold))] mb-4"
-           style={{ fontFamily: "'Oswald', sans-serif" }}>
-          Бу кӱнге арткан
-        </p>
-        <Countdown />
       </section>
 
-      {/* ══ СЛАЙД 6: Долина с орлами (финал) ══ */}
-      <section className="relative w-full h-screen overflow-hidden flex items-center justify-center">
-        <img src={IMG_VALLEY} alt="" className="absolute inset-0 w-full h-full object-cover animate-pan" />
-        <div className="absolute inset-0 bg-[hsl(var(--deep))]/35" />
-        <Corners light />
+      {/* ═══ ЭКРАН 5: Карта / Место ═══ */}
+      <section className="relative w-full h-screen flex flex-col items-center justify-center text-center px-10"
+        style={{background: BG}}>
+        <SideBorder/><SideBorder flip/>
+        <div className="relative z-10 flex flex-col items-center gap-4 w-full max-w-sm">
+          {/* Нарисованная иконка горы */}
+          <svg viewBox="0 0 100 70" width={120} height={84} fill="none" stroke={GOLD} strokeWidth="1.8" strokeLinejoin="round">
+            <path d="M10,65 L38,20 L50,38 L65,8 L90,65Z" fill="hsl(28,28%,28%)" fillOpacity="0.12"/>
+            <path d="M65,8 L58,22 L72,22Z" fill="white" fillOpacity="0.5" strokeWidth="0"/>
+            <path d="M38,20 L33,30 L43,30Z" fill="white" fillOpacity="0.4" strokeWidth="0"/>
+            <line x1="10" y1="65" x2="90" y2="65" strokeWidth="1" strokeOpacity="0.4"/>
+          </svg>
 
-        {/* Орнамент внизу по центру как на эскизе */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
-          <Knot className="w-10 h-10 text-[hsl(var(--parch))]/70 animate-float" />
+          <AltaiStar size={36}/>
+
+          <div>
+            <p style={{fontSize:'clamp(1.5rem,7vw,2.4rem)', color:C, fontStyle:'italic', lineHeight:1.1}}>
+              «Туштажу»
+            </p>
+            <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'clamp(0.9rem,4vw,1.2rem)', color:GOLD, letterSpacing:'0.1em', marginTop:4}}>
+              кафе • Кош-Агач
+            </p>
+          </div>
+
+          <Branch/>
+
+          {/* Кнопка навигатора */}
+          <a
+            href="https://maps.yandex.ru/?text=Кош-Агач+кафе+Туштажу"
+            target="_blank" rel="noreferrer"
+            onClick={e => e.stopPropagation()}
+            className="flex items-center gap-3 px-6 py-3 rounded-full"
+            style={{
+              background:'hsl(28,38%,28%)',
+              color:'hsl(44,42%,92%)',
+              fontFamily:"'Oswald',sans-serif",
+              fontSize:'13px',
+              letterSpacing:'0.15em',
+              textDecoration:'none',
+              boxShadow:'0 4px 16px hsla(28,38%,20%,0.25)'
+            }}>
+            <Icon name="Navigation" size={16}/>
+            ОТКРЫТЬ В НАВИГАТОРЕ
+          </a>
+
+          <p style={{fontFamily:"'Golos Text',sans-serif", fontSize:'11px', color:C, opacity:0.45, marginTop:4}}>
+            Нажми — откроется карта
+          </p>
+        </div>
+      </section>
+
+      {/* ═══ ЭКРАН 6: Финал / Долина ═══ */}
+      <section className="relative w-full h-screen overflow-hidden flex items-center justify-center">
+        <img src={IMG_VALLEY} alt="" className="absolute inset-0 w-full h-full object-cover animate-pan"/>
+        <div className="absolute inset-0" style={{background:'hsla(28,25%,15%,0.45)'}}/>
+        <SideBorder/><SideBorder flip/>
+
+        <div className="relative z-10 flex flex-col items-center text-center px-12 gap-4">
+          <AltaiStar size={52}/>
+          <p style={{fontFamily:"'Cormorant',serif", fontSize:'clamp(1.6rem,7vw,2.8rem)', color:'hsl(44,42%,92%)', lineHeight:1.5}}>
+            Слерди сакып турубыс
+          </p>
+          <p style={{fontFamily:"'Golos Text',sans-serif", fontSize:'13px', color:'hsl(44,38%,88%)', opacity:0.7}}>
+            Мы ждём вас
+          </p>
+          <Branch/>
+          <div className="flex items-center gap-3 mt-2">
+            <Icon name="Phone" size={18} style={{color:'hsl(44,38%,88%)'}}/>
+            <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'clamp(0.9rem,4vw,1.1rem)', color:'hsl(44,38%,88%)', letterSpacing:'0.1em'}}>
+              +7 (900) 000-00-00
+            </p>
+          </div>
+          <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'10px', color:'hsl(44,35%,82%)', letterSpacing:'0.25em', opacity:0.65, marginTop:4}}>
+            АЭЛИТА &amp; ТУЗАГАШ • 14.08.2026
+          </p>
         </div>
       </section>
 
