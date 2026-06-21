@@ -1,236 +1,189 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Icon from '@/components/ui/icon';
 import Countdown from '@/components/Countdown';
 
-const IMG_FIRE   = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/d71ff136-0e27-44f1-8f11-84bcc374afc7.jpg';
-const IMG_COUPLE = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/cf67aa21-0239-478b-801d-dedd34d2401d.jpg';
-const IMG_VALLEY = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/04be6736-f750-416e-8026-c3d5f8f53dfb.jpg';
+const IMG_NIGHT   = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/09695477-da83-43f3-a1fb-138d5ad5600d.jpg';
+const IMG_COUPLE  = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/47b96426-c610-4297-833d-dbbec2f22a11.jpg';
+const IMG_VALLEY  = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/04be6736-f750-416e-8026-c3d5f8f53dfb.jpg';
 
-/* ── Алтайская боковая орнаментальная полоса ── */
-const SideBorder = ({ flip = false }: { flip?: boolean }) => (
-  <svg
-    viewBox="0 0 44 880"
-    className="absolute top-0 h-full w-11 pointer-events-none"
-    style={{ left: flip ? 'auto' : 0, right: flip ? 0 : 'auto', transform: flip ? 'scaleX(-1)' : 'none' }}
-    preserveAspectRatio="xMidYMid slice"
-  >
-    <rect x="0" y="0" width="44" height="880" fill="hsl(28,35%,28%)" fillOpacity="0.10"/>
-    <rect x="0" y="0" width="2.5" height="880" fill="hsl(28,40%,28%)" fillOpacity="0.65"/>
-    <rect x="6" y="0" width="0.8" height="880" fill="hsl(28,35%,32%)" fillOpacity="0.3"/>
-    {Array.from({length:22}).map((_,i) => {
-      const y = i * 40;
-      return (
-        <g key={i} transform={`translate(4,${y})`}>
-          <path d="M18,2 L34,18 L18,34 L2,18 Z" fill="hsl(28,38%,28%)" fillOpacity="0.20" stroke="hsl(28,38%,28%)" strokeWidth="0.7" strokeOpacity="0.45"/>
-          <path d="M18,9 L25,18 L18,27 L11,18 Z" fill="hsl(28,38%,26%)" fillOpacity="0.28"/>
-          <rect x="14" y="14" width="8" height="8" transform="rotate(45 18 18)" fill="hsl(28,38%,28%)" fillOpacity="0.15"/>
-          <circle cx="18" cy="18" r="2" fill="hsl(28,38%,25%)" fillOpacity="0.35"/>
-        </g>
-      );
-    })}
-  </svg>
-);
+/* ── Золотой алтайский орнамент-звезда ── */
+const Star = ({ size = 56 }: { size?: number }) => {
+  const pts = Array.from({length:8},(_,i)=>{
+    const a = (i*45)*Math.PI/180;
+    const r = i%2===0 ? size/2-4 : size/2-14;
+    return `${size/2+r*Math.cos(a-Math.PI/2)},${size/2+r*Math.sin(a-Math.PI/2)}`;
+  }).join(' ');
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} fill="none">
+      <polygon points={pts} fill="none" stroke="hsl(42,75%,58%)" strokeWidth="1.2" strokeOpacity="0.9"/>
+      <polygon points={pts} fill="hsl(42,75%,58%)" fillOpacity="0.08"/>
+      {/* внутренний ромб */}
+      <path d={`M${size/2},${size/2-10} L${size/2+10},${size/2} L${size/2},${size/2+10} L${size/2-10},${size/2}Z`}
+        fill="none" stroke="hsl(42,75%,58%)" strokeWidth="1" strokeOpacity="0.7"/>
+      <circle cx={size/2} cy={size/2} r="3.5" fill="hsl(42,75%,65%)" fillOpacity="0.85"/>
+    </svg>
+  );
+};
 
-/* ── Летящий беркут SVG ── */
-const Eagle = ({ x, y, scale = 1, opacity = 0.5 }: { x: number; y: number; scale?: number; opacity?: number }) => (
-  <g transform={`translate(${x},${y}) scale(${scale})`} opacity={opacity}>
-    {/* тело */}
-    <ellipse cx="0" cy="0" rx="10" ry="4.5" fill="hsl(28,28%,22%)"/>
-    {/* голова */}
-    <ellipse cx="11" cy="-3" rx="5" ry="4" fill="hsl(28,28%,22%)"/>
-    {/* клюв крючком */}
-    <path d="M15,-2 Q20,-1 18,2 Q16,1 15,-2Z" fill="hsl(28,28%,18%)"/>
-    {/* левое крыло вверх */}
-    <path d="M-2,-2 C-14,-16 -28,-22 -44,-18 C-32,-12 -18,-6 -8,0Z" fill="hsl(28,26%,25%)"/>
-    {/* перья левого крыла */}
-    <path d="M-30,-19 C-28,-12 -24,-6 -18,-2" stroke="hsl(28,25%,32%)" strokeWidth="0.7" fill="none" opacity="0.7"/>
-    <path d="M-38,-17 C-36,-10 -30,-4 -22,-1" stroke="hsl(28,25%,32%)" strokeWidth="0.6" fill="none" opacity="0.5"/>
-    {/* правое крыло вниз */}
-    <path d="M-2,2 C-10,14 -22,22 -38,26 C-28,18 -14,10 -4,4Z" fill="hsl(28,26%,25%)"/>
-    {/* хвост */}
-    <path d="M-10,1 C-16,6 -20,12 -18,18 C-14,10 -10,5 -10,1Z" fill="hsl(28,26%,23%)"/>
-    <path d="M-11,2 C-18,8 -22,14 -21,20 C-16,12 -12,6 -11,2Z" fill="hsl(28,26%,23%)"/>
-  </g>
-);
+/* ── Золотой разделитель ── */
+const Divider = ({ light = false }: { light?: boolean }) => {
+  const col = light ? 'hsl(42,60%,72%)' : 'hsl(42,75%,58%)';
+  return (
+    <div style={{display:'flex', alignItems:'center', gap:10, margin:'12px 0'}}>
+      <span style={{height:1, width:48, background:`linear-gradient(to right, transparent, ${col})`, display:'block'}}/>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill={col}>
+        <polygon points="7,0 14,7 7,14 0,7"/>
+      </svg>
+      <span style={{height:1, width:48, background:`linear-gradient(to left, transparent, ${col})`, display:'block'}}/>
+    </div>
+  );
+};
 
-/* ── Горный пейзаж SVG ── */
-const Mountains = () => (
-  <svg viewBox="0 0 375 320" className="absolute bottom-0 left-0 w-full" style={{height:'50%'}}
-       preserveAspectRatio="xMidYMax meet">
-    <defs>
-      <linearGradient id="gFar" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="hsl(215,14%,80%)"/>
-        <stop offset="100%" stopColor="hsl(210,10%,72%)"/>
-      </linearGradient>
-      <linearGradient id="gMid" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="hsl(200,10%,65%)"/>
-        <stop offset="100%" stopColor="hsl(195,8%,56%)"/>
-      </linearGradient>
-      <linearGradient id="gNear" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="hsl(35,12%,54%)"/>
-        <stop offset="100%" stopColor="hsl(32,14%,44%)"/>
-      </linearGradient>
-      <linearGradient id="gFront" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor="hsl(30,15%,44%)"/>
-        <stop offset="100%" stopColor="hsl(28,16%,34%)"/>
-      </linearGradient>
-      <filter id="blurFar"><feGaussianBlur stdDeviation="2.5"/></filter>
-      <filter id="blurMid"><feGaussianBlur stdDeviation="1.2"/></filter>
-    </defs>
-    {/* Дальние горы */}
-    <path d="M0,320 L0,180 C40,160 70,170 95,140 C118,114 138,128 162,96 C182,70 200,85 225,65 C248,46 268,62 292,52 C312,42 338,56 375,48 L375,320Z"
-          fill="url(#gFar)" opacity="0.55" filter="url(#blurFar)"/>
-    {/* Снег дальних пиков */}
-    <path d="M162,96 C168,86 175,88 180,82 C175,96 164,100 162,96Z" fill="white" opacity="0.5" filter="url(#blurFar)"/>
-    <path d="M225,65 C231,55 238,57 244,51 C239,65 227,68 225,65Z" fill="white" opacity="0.55" filter="url(#blurFar)"/>
-    <path d="M292,52 C298,43 304,45 309,40 C305,53 293,56 292,52Z" fill="white" opacity="0.45" filter="url(#blurFar)"/>
-    {/* Туман 1 */}
-    <path d="M0,320 L0,220 Q188,198 375,215 L375,320Z" fill="hsl(44,38%,90%)" opacity="0.5" filter="url(#blurFar)"/>
-    {/* Средние горы */}
-    <path d="M0,320 L0,230 C28,215 55,224 78,200 C100,178 122,190 148,166 C168,148 188,158 210,138 C230,120 252,132 274,118 C294,106 318,116 345,108 C358,104 368,108 375,106 L375,320Z"
-          fill="url(#gMid)" opacity="0.72" filter="url(#blurMid)"/>
-    <path d="M148,166 C154,157 160,159 165,153 C161,166 150,170 148,166Z" fill="white" opacity="0.38"/>
-    <path d="M210,138 C216,128 222,130 227,125 C223,138 212,142 210,138Z" fill="white" opacity="0.4"/>
-    {/* Туман 2 */}
-    <path d="M0,320 L0,262 Q188,246 375,260 L375,320Z" fill="hsl(42,34%,88%)" opacity="0.55" filter="url(#blurMid)"/>
-    {/* Ближние горы */}
-    <path d="M0,320 L0,275 C25,260 52,268 78,252 C102,237 126,246 152,232 C174,220 196,228 220,216 C242,205 264,212 288,202 C308,193 332,200 358,195 C365,193 371,195 375,194 L375,320Z"
-          fill="url(#gNear)" opacity="0.82"/>
-    {/* Передний план */}
-    <path d="M0,320 L0,295 C30,284 62,290 95,280 C128,270 160,278 192,268 C224,258 256,266 288,258 C318,250 348,256 375,252 L375,320Z"
-          fill="url(#gFront)" opacity="0.9"/>
-    {/* Туман у подножия */}
-    <path d="M0,320 L0,304 Q188,292 375,304 L375,320Z" fill="hsl(40,30%,85%)" opacity="0.65"/>
-  </svg>
-);
-
-/* ── Алтайский центральный орнамент ── */
-const AltaiStar = ({ size = 64 }: { size?: number }) => (
-  <svg viewBox="0 0 64 64" width={size} height={size} fill="none">
-    {[0,45,90,135,180,225,270,315].map((a,i) => {
-      const r1=28, r2=20, mid=a+22.5;
-      const x1=32+r2*Math.cos((a-22.5)*Math.PI/180), y1=32+r2*Math.sin((a-22.5)*Math.PI/180);
-      const xm=32+r1*Math.cos(a*Math.PI/180),        ym=32+r1*Math.sin(a*Math.PI/180);
-      const x2=32+r2*Math.cos((a+22.5)*Math.PI/180), y2=32+r2*Math.sin((a+22.5)*Math.PI/180);
-      void mid;
-      return <path key={i} d={`M32,32 L${x1},${y1} Q${xm},${ym} ${x2},${y2}Z`}
-               fill="hsl(28,38%,28%)" fillOpacity={i%2===0?0.5:0.28}/>;
-    })}
-    <path d="M32,18 L46,32 L32,46 L18,32 Z" stroke="hsl(28,38%,28%)" strokeWidth="1" fill="hsl(28,38%,28%)" fillOpacity="0.10"/>
-    <path d="M32,24 L40,32 L32,40 L24,32 Z" fill="hsl(28,38%,28%)" fillOpacity="0.38"/>
-    <circle cx="32" cy="32" r="4" fill="hsl(28,38%,25%)" fillOpacity="0.7"/>
-  </svg>
-);
-
-/* ── Разделитель с ветками ── */
-const Branch = () => (
-  <svg viewBox="0 0 280 28" width={260} height={28} fill="none" stroke="hsl(28,35%,33%)">
-    <path d="M140,14 L132,8 L124,14 L132,20Z" fill="hsl(28,38%,30%)" fillOpacity="0.6" strokeWidth="0"/>
-    <line x1="122" y1="14" x2="14" y2="14" strokeWidth="0.8" strokeOpacity="0.4"/>
-    <path d="M14,14 L22,9 M14,14 L22,19" strokeWidth="1.1" strokeOpacity="0.5"/>
-    {[100,80,60,40].map(x=>(
-      <g key={x}>
-        <path d={`M${x},14 Q${x-5},9 ${x-9},7`} strokeWidth="0.9" strokeOpacity="0.4"/>
-        <path d={`M${x},14 Q${x-5},19 ${x-9},21`} strokeWidth="0.9" strokeOpacity="0.4"/>
-      </g>
-    ))}
-    <line x1="158" y1="14" x2="266" y2="14" strokeWidth="0.8" strokeOpacity="0.4"/>
-    <path d="M266,14 L258,9 M266,14 L258,19" strokeWidth="1.1" strokeOpacity="0.5"/>
-    {[180,200,220,240].map(x=>(
-      <g key={x}>
-        <path d={`M${x},14 Q${x+5},9 ${x+9},7`} strokeWidth="0.9" strokeOpacity="0.4"/>
-        <path d={`M${x},14 Q${x+5},19 ${x+9},21`} strokeWidth="0.9" strokeOpacity="0.4"/>
+/* ── Боковые орнаменты ── */
+const Side = ({ right = false }: { right?: boolean }) => (
+  <svg viewBox="0 0 32 800" preserveAspectRatio="xMidYMid slice"
+    className="absolute top-0 h-full pointer-events-none"
+    style={{width:32, left: right ? 'auto' : 0, right: right ? 0 : 'auto',
+            transform: right ? 'scaleX(-1)' : 'none'}}>
+    {/* тонкая золотая полоса */}
+    <rect x="0" y="0" width="1.5" height="800" fill="hsl(42,70%,55%)" fillOpacity="0.5"/>
+    <rect x="28" y="0" width="1" height="800" fill="hsl(42,70%,55%)" fillOpacity="0.2"/>
+    {/* повторяющийся ромб */}
+    {Array.from({length:20}).map((_,i)=>(
+      <g key={i} transform={`translate(0,${i*40})`}>
+        <path d="M16,4 L28,16 L16,28 L4,16Z"
+          fill="none" stroke="hsl(42,70%,55%)" strokeWidth="0.8" strokeOpacity="0.45"/>
+        <circle cx="16" cy="16" r="2.5" fill="hsl(42,70%,58%)" fillOpacity="0.35"/>
       </g>
     ))}
   </svg>
 );
 
-/* ════════════════════════════════════════════════════════ */
-const Index = () => {
-  const [opened, setOpened] = useState(false);
-  const [revealed, setRevealed] = useState(false);
-  const [eagleX, setEagleX] = useState(-60);
-  const [eagle2X, setEagle2X] = useState(-160);
-  const [music, setMusic] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
+/* ── Летящие беркуты ── */
+const Eagles = ({ x1, x2 }: { x1: number; x2: number }) => (
+  <svg className="absolute top-0 left-0 w-full pointer-events-none" style={{height:'35%'}}
+       viewBox="0 0 375 140" preserveAspectRatio="xMidYMid meet">
+    {/* Орёл 1 */}
+    <g transform={`translate(${x1},45)`} opacity="0.55">
+      <ellipse cx="0" cy="0" rx="11" ry="5" fill="hsl(42,70%,60%)"/>
+      <ellipse cx="13" cy="-4" rx="5.5" ry="4.5" fill="hsl(42,70%,60%)"/>
+      <path d="M17,-3 Q23,-1 20,3 Q17,1 17,-3Z" fill="hsl(42,65%,50%)"/>
+      <path d="M-3,-3 C-16,-18 -32,-24 -50,-20 C-36,-13 -20,-6 -9,1Z" fill="hsl(42,68%,58%)"/>
+      <path d="M-3,3 C-12,16 -26,26 -44,30 C-30,20 -16,11 -5,5Z" fill="hsl(42,68%,58%)"/>
+      <path d="M-12,2 C-18,9 -22,16 -20,22 C-16,13 -12,7 -12,2Z" fill="hsl(42,65%,55%)"/>
+    </g>
+    {/* Орёл 2 маленький */}
+    <g transform={`translate(${x2},25) scale(0.55)`} opacity="0.35">
+      <ellipse cx="0" cy="0" rx="11" ry="5" fill="hsl(42,70%,62%)"/>
+      <ellipse cx="13" cy="-4" rx="5.5" ry="4.5" fill="hsl(42,70%,62%)"/>
+      <path d="M17,-3 Q23,-1 20,3 Q17,1 17,-3Z" fill="hsl(42,65%,52%)"/>
+      <path d="M-3,-3 C-16,-18 -32,-24 -50,-20 C-36,-13 -20,-6 -9,1Z" fill="hsl(42,68%,60%)"/>
+      <path d="M-3,3 C-12,16 -26,26 -44,30 C-30,20 -16,11 -5,5Z" fill="hsl(42,68%,60%)"/>
+    </g>
+  </svg>
+);
 
-  /* Анимация беркутов */
-  useEffect(() => {
-    let x1 = -60, x2 = -160;
-    const id = setInterval(() => {
-      x1 = x1 > 420 ? -100 : x1 + 0.4;
-      x2 = x2 > 420 ? -180 : x2 + 0.25;
-      setEagleX(x1);
-      setEagle2X(x2);
-    }, 30);
-    return () => clearInterval(id);
-  }, []);
+/* ═══════════════════════ СТРАНИЦА ═══════════════════════ */
+export default function Index() {
+  const [opened, setOpened]   = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [eagle1, setEagle1]   = useState(-80);
+  const [eagle2, setEagle2]   = useState(-200);
 
-  /* Открытие с задержкой для анимации */
-  const handleOpen = () => {
-    setOpened(true);
-    setTimeout(() => setRevealed(true), 50);
+  /* беркуты */
+  useEffect(()=>{
+    let e1=-80, e2=-200;
+    const id = setInterval(()=>{
+      e1 = e1>450 ? -100 : e1+0.45;
+      e2 = e2>450 ? -220 : e2+0.28;
+      setEagle1(e1); setEagle2(e2);
+    },30);
+    return ()=>clearInterval(id);
+  },[]);
+
+  const open = () => { setOpened(true); setTimeout(()=>setVisible(true),80); };
+
+  /* палитра */
+  const DARK  = '#1a1208';
+  const GOLD  = 'hsl(42,75%,60%)';
+  const GOLD2 = 'hsl(42,60%,72%)';
+  const CREAM = 'hsl(44,55%,92%)';
+
+  const darkBg: React.CSSProperties = {
+    background:'linear-gradient(180deg,#0d0b07 0%,#1a1308 40%,#241a0a 100%)'
   };
-
-  const toggleMusic = () => {
-    if (!audioRef.current) return;
-    if (music) { audioRef.current.pause(); setMusic(false); }
-    else { audioRef.current.play().catch(()=>{}); setMusic(true); }
-  };
-
-  const C = 'hsl(28,30%,20%)';
-  const GOLD = 'hsl(32,42%,38%)';
-  const BG = 'linear-gradient(180deg, hsl(46,42%,94%) 0%, hsl(42,36%,88%) 50%, hsl(38,30%,82%) 100%)';
 
   return (
-    <div style={{ fontFamily:"'Cormorant',serif", background:'hsl(42,35%,90%)' }}>
+    <div style={{fontFamily:"'Cormorant',serif", background:'#0d0b07', color:CREAM}}>
 
-      {/* ═══ ЭКРАН 1: Стартовый ═══ */}
+      {/* ══════════════════════════════════════
+          СЛАЙД 1 — тёмный, золото, беркуты
+      ══════════════════════════════════════ */}
       {!opened && (
-        <section onClick={handleOpen}
+        <section onClick={open}
           className="fixed inset-0 z-50 cursor-pointer overflow-hidden flex flex-col"
-          style={{ background: BG }}>
+          style={darkBg}>
 
-          <SideBorder/>
-          <SideBorder flip/>
+          {/* Ночные горы на фоне */}
+          <img src={IMG_NIGHT} alt="" className="absolute inset-0 w-full h-full object-cover"
+               style={{opacity:0.35, mixBlendMode:'luminosity'}}/>
+          {/* Золотистый туман снизу */}
+          <div className="absolute bottom-0 left-0 right-0 h-1/3"
+               style={{background:'linear-gradient(to top, rgba(26,19,8,0.95), transparent)'}}/>
+          {/* Тёмный оверлей сверху */}
+          <div className="absolute top-0 left-0 right-0 h-1/4"
+               style={{background:'linear-gradient(to bottom, rgba(13,11,7,0.8), transparent)'}}/>
 
-          {/* Беркуты летят */}
-          <svg className="absolute top-0 left-0 w-full pointer-events-none" style={{height:'38%'}} viewBox="0 0 375 160" preserveAspectRatio="xMidYMid meet">
-            <Eagle x={eagleX} y={48} scale={1.1} opacity={0.42}/>
-            <Eagle x={eagle2X} y={28} scale={0.68} opacity={0.28}/>
-          </svg>
+          <Side/><Side right/>
+          <Eagles x1={eagle1} x2={eagle2}/>
 
-          <Mountains/>
+          {/* Звёзды */}
+          {[[12,8],[88,15],[25,22],[72,6],[55,18],[38,4],[80,25]].map(([x,y],i)=>(
+            <div key={i} className="absolute rounded-full animate-pulse"
+              style={{left:`${x}%`,top:`${y}%`,
+                width: i%3===0?2:1.5, height: i%3===0?2:1.5,
+                background:GOLD, opacity:0.4+i*0.07,
+                animationDelay:`${i*0.4}s`}}/>
+          ))}
 
-          {/* Контент */}
-          <div className="relative z-10 flex flex-col items-center justify-between h-full py-10 px-12 text-center">
+          <div className="relative z-10 flex flex-col items-center justify-between h-full py-12 px-10 text-center">
             <div/>
-            <div className="flex flex-col items-center gap-1">
-              <AltaiStar size={52}/>
-              <h1 style={{fontSize:'clamp(3rem,13vw,5.2rem)', color:C, lineHeight:1.05, marginTop:8}}>
+
+            <div className="flex flex-col items-center">
+              <Star size={60}/>
+              <div style={{marginTop:20, marginBottom:4}}>
+                <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'10px',
+                  letterSpacing:'0.45em', color:GOLD, textTransform:'uppercase', opacity:0.8}}>
+                  Туштажу
+                </p>
+              </div>
+              <h1 style={{fontSize:'clamp(3.5rem,15vw,6rem)', color:CREAM,
+                lineHeight:1.0, textShadow:`0 0 40px ${GOLD}44`}}>
                 Аэлита
               </h1>
-              <span style={{fontSize:'clamp(2rem,8vw,3rem)', color:GOLD, fontStyle:'italic', lineHeight:1}}>
+              <span style={{fontSize:'clamp(2.2rem,9vw,3.5rem)', color:GOLD,
+                fontStyle:'italic', lineHeight:1.1, textShadow:`0 0 20px ${GOLD}66`}}>
                 &amp;
               </span>
-              <h1 style={{fontSize:'clamp(3rem,13vw,5.2rem)', color:C, lineHeight:1.05}}>
+              <h1 style={{fontSize:'clamp(3.5rem,15vw,6rem)', color:CREAM,
+                lineHeight:1.0, textShadow:`0 0 40px ${GOLD}44`}}>
                 Тузагаш
               </h1>
-              <div style={{marginTop:12}}>
-                <Branch/>
-              </div>
-              <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'clamp(0.75rem,3.2vw,0.95rem)', color:GOLD, letterSpacing:'0.05em', marginTop:8, fontWeight:400}}>
+              <Divider light/>
+              <p style={{fontSize:'clamp(0.85rem,3.5vw,1.05rem)', color:GOLD2,
+                fontStyle:'italic', lineHeight:1.5, marginTop:4}}>
                 Јӱректерди Алтай јараштырат
               </p>
-              <p style={{fontFamily:"'Golos Text',sans-serif", fontSize:'11px', color:C, opacity:0.5, marginTop:2}}>
+              <p style={{fontFamily:"'Golos Text',sans-serif", fontSize:'11px',
+                color:CREAM, opacity:0.4, marginTop:3}}>
                 «Алтай соединяет сердца»
               </p>
             </div>
 
-            {/* Подпись */}
-            <div className="flex flex-col items-center gap-1 animate-float">
-              <span style={{fontSize:26}}>👇</span>
-              <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'10px', letterSpacing:'0.22em', color:C, opacity:0.6, textTransform:'uppercase'}}>
+            <div className="flex flex-col items-center gap-2" style={{animation:'float-slow 3s ease-in-out infinite'}}>
+              <Icon name="ChevronDown" size={22} style={{color:GOLD}}/>
+              <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'10px',
+                letterSpacing:'0.25em', color:CREAM, opacity:0.5, textTransform:'uppercase'}}>
                 Экранга тийип ачыгар
               </p>
             </div>
@@ -238,181 +191,199 @@ const Index = () => {
         </section>
       )}
 
-      {/* ═══ КНОПКА МУЗЫКИ ═══ */}
-      {opened && (
-        <button onClick={toggleMusic}
-          className="fixed top-4 right-4 z-50 flex items-center gap-2 px-3 py-2 rounded-full"
-          style={{background:'hsl(42,35%,88%)', border:'1px solid hsl(28,35%,55%)', boxShadow:'0 2px 8px rgba(0,0,0,0.15)'}}>
-          <span style={{fontSize:16}}>{music ? '🔊' : '🔇'}</span>
-          <span style={{fontFamily:"'Oswald',sans-serif", fontSize:'10px', letterSpacing:'0.15em', color:C, opacity:0.7}}>
-            МУЗЫКА
-          </span>
-        </button>
-      )}
-      <audio ref={audioRef} loop>
-        {/* Подключи алтайскую музыку сюда */}
-      </audio>
+      {/* ══════════════════════════════════════
+          СЛАЙД 2 — стихотворение
+      ══════════════════════════════════════ */}
+      <section className="relative w-full h-screen flex flex-col items-center justify-center text-center px-10"
+        style={darkBg}>
+        <img src={IMG_NIGHT} alt="" className="absolute inset-0 w-full h-full object-cover"
+             style={{opacity:0.2, mixBlendMode:'luminosity'}}/>
+        <div className="absolute inset-0" style={{background:'rgba(13,11,7,0.55)'}}/>
+        <Side/><Side right/>
 
-      {/* ═══ ЭКРАН 2: Стихотворение + очаг ═══ */}
-      <section className="relative w-full h-screen overflow-hidden flex flex-col items-center justify-center text-center px-10"
-        style={{background: BG}}>
-        <SideBorder/><SideBorder flip/>
-
-        {/* Иллюстрация очага снизу */}
-        <div className="absolute bottom-0 left-0 right-0 h-2/5">
-          <img src={IMG_FIRE} alt="" className="w-full h-full object-cover object-top" style={{opacity:0.5}}/>
-          <div className="absolute inset-0" style={{background:'linear-gradient(to bottom, hsl(44,40%,92%) 0%, transparent 60%)'}}/>
-        </div>
-
-        <div className="relative z-10 flex flex-col items-center" style={{
-          opacity: revealed ? 1 : 0,
-          transform: revealed ? 'translateY(0)' : 'translateY(30px)',
-          transition: 'all 1.2s cubic-bezier(0.16,1,0.3,1)'
-        }}>
-          <AltaiStar size={40}/>
-          <p style={{fontSize:'clamp(1.2rem,5vw,1.7rem)', color:C, lineHeight:1.9, marginTop:20, fontStyle:'italic'}}>
+        <div className="relative z-10 flex flex-col items-center"
+          style={{opacity:visible?1:0, transform:visible?'none':'translateY(24px)',
+            transition:'all 1.4s cubic-bezier(0.16,1,0.3,1)'}}>
+          <Star size={44}/>
+          <div style={{width:1, height:32, background:`linear-gradient(${GOLD},transparent)`, margin:'8px auto'}}/>
+          <p style={{fontSize:'clamp(1.2rem,5vw,1.65rem)', color:CREAM,
+            lineHeight:2.1, fontStyle:'italic', opacity:0.9}}>
             Јайдыҥ јараш кӱӱнинде,<br/>
             Јаҥы кӱйген очокко,<br/>
             Јаҥарлап кожоҥ јайыгар,<br/>
             Јараш алкыштар айдыгар.
           </p>
-          <Branch/>
-          <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'clamp(0.85rem,3.5vw,1.05rem)', color:C, opacity:0.75, lineHeight:1.8, marginTop:8}}>
-            Бистиҥ кудабыска<br/>акту јӱрегистеҥ кычырып турубыс
+          <Divider light/>
+          <p style={{fontFamily:"'Oswald',sans-serif",
+            fontSize:'clamp(0.9rem,3.8vw,1.1rem)', color:GOLD2,
+            letterSpacing:'0.04em', lineHeight:1.9, opacity:0.85}}>
+            Бистиҥ кудабыска<br/>
+            акту јӱрегистеҥ кычырып турубыс
           </p>
-          <div className="mt-6 flex flex-col items-center gap-1">
-            <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'11px', color:GOLD, letterSpacing:'0.2em', textTransform:'uppercase'}}>
+          <div style={{marginTop:24}}>
+            <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'11px',
+              color:GOLD, letterSpacing:'0.22em', textTransform:'uppercase', opacity:0.7}}>
               Јаҥы очоктыҥ башталганы
             </p>
-            <p style={{fontFamily:"'Golos Text',sans-serif", fontSize:'10px', color:C, opacity:0.45}}>
+            <p style={{fontFamily:"'Golos Text',sans-serif", fontSize:'10px',
+              color:CREAM, opacity:0.35, marginTop:3}}>
               Начало нового очага
             </p>
           </div>
         </div>
       </section>
 
-      {/* ═══ ЭКРАН 3: Молодожёны на фоне Алтая ═══ */}
+      {/* ══════════════════════════════════════
+          СЛАЙД 3 — молодожёны
+      ══════════════════════════════════════ */}
       <section className="relative w-full h-screen overflow-hidden flex items-end justify-center">
-        <img src={IMG_COUPLE} alt="" className="absolute inset-0 w-full h-full object-cover animate-pan"/>
-        <div className="absolute inset-0" style={{background:'linear-gradient(to top, hsl(42,38%,90%) 0%, rgba(0,0,0,0.05) 55%, transparent 100%)'}}/>
-        <div className="relative z-10 w-full text-center pb-16 px-10">
-          <AltaiStar size={36}/>
-          <Branch/>
-          <h2 style={{fontFamily:"'Cormorant',serif", fontSize:'clamp(2.2rem,10vw,4rem)', color:C, lineHeight:1.1, marginTop:8}}>
+        <img src={IMG_COUPLE} alt=""
+             className="absolute inset-0 w-full h-full object-cover animate-pan"/>
+        <div className="absolute inset-0"
+             style={{background:'linear-gradient(to top,rgba(13,11,7,0.92) 0%,rgba(13,11,7,0.1) 55%,transparent 100%)'}}/>
+        <Side/><Side right/>
+        <div className="relative z-10 text-center pb-14 px-10 w-full">
+          <Star size={38}/>
+          <Divider light/>
+          <h2 style={{fontSize:'clamp(2.4rem,11vw,4.2rem)', color:CREAM,
+            lineHeight:1.05, textShadow:`0 0 30px ${GOLD}55`}}>
             Аэлита<br/>
-            <span style={{color:GOLD, fontStyle:'italic', fontSize:'0.75em'}}>&amp;</span><br/>
+            <span style={{color:GOLD, fontStyle:'italic', fontSize:'0.7em'}}>&amp;</span><br/>
             Тузагаш
           </h2>
         </div>
       </section>
 
-      {/* ═══ ЭКРАН 4: Дата и время ═══ */}
+      {/* ══════════════════════════════════════
+          СЛАЙД 4 — дата + отсчёт
+      ══════════════════════════════════════ */}
       <section className="relative w-full h-screen flex flex-col items-center justify-center text-center px-10"
-        style={{background: BG}}>
-        <SideBorder/><SideBorder flip/>
+        style={darkBg}>
+        <img src={IMG_NIGHT} alt="" className="absolute inset-0 w-full h-full object-cover"
+             style={{opacity:0.15}}/>
+        <div className="absolute inset-0" style={{background:'rgba(13,11,7,0.6)'}}/>
+        <Side/><Side right/>
+
         <div className="relative z-10 flex flex-col items-center gap-5 w-full max-w-xs">
-          <AltaiStar size={44}/>
-          <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'10px', letterSpacing:'0.3em', color:GOLD, textTransform:'uppercase', marginTop:4}}>
+          <Star size={48}/>
+          <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'10px',
+            letterSpacing:'0.35em', color:GOLD, textTransform:'uppercase', opacity:0.8}}>
             Бу кӱнге арткан
           </p>
           <Countdown/>
-          <Branch/>
-          {/* Детали */}
+          <Divider light/>
           {[
-            {icon:'Calendar', label:'14 августа 2026'},
-            {icon:'Clock',    label:'16:00'},
+            {icon:'Calendar', text:'14 августа 2026'},
+            {icon:'Clock',    text:'16:00'},
           ].map(r=>(
-            <div key={r.label} className="flex items-center gap-4">
-              <span className="w-10 h-10 rounded-full flex items-center justify-center"
-                style={{border:'1px solid hsl(28,35%,50%)', color:GOLD}}>
-                <Icon name={r.icon} size={18}/>
+            <div key={r.text} style={{display:'flex', alignItems:'center', gap:14}}>
+              <span style={{
+                width:40, height:40, borderRadius:'50%',
+                border:`1px solid ${GOLD}66`,
+                display:'flex', alignItems:'center', justifyContent:'center',
+                color:GOLD, flexShrink:0
+              }}>
+                <Icon name={r.icon} size={17}/>
               </span>
-              <span style={{fontSize:'clamp(1.3rem,6vw,2rem)', color:C}}>{r.label}</span>
+              <span style={{fontSize:'clamp(1.3rem,6vw,2rem)', color:CREAM}}>{r.text}</span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ═══ ЭКРАН 5: Карта / Место ═══ */}
+      {/* ══════════════════════════════════════
+          СЛАЙД 5 — место
+      ══════════════════════════════════════ */}
       <section className="relative w-full h-screen flex flex-col items-center justify-center text-center px-10"
-        style={{background: BG}}>
-        <SideBorder/><SideBorder flip/>
-        <div className="relative z-10 flex flex-col items-center gap-4 w-full max-w-sm">
-          {/* Нарисованная иконка горы */}
-          <svg viewBox="0 0 100 70" width={120} height={84} fill="none" stroke={GOLD} strokeWidth="1.8" strokeLinejoin="round">
-            <path d="M10,65 L38,20 L50,38 L65,8 L90,65Z" fill="hsl(28,28%,28%)" fillOpacity="0.12"/>
-            <path d="M65,8 L58,22 L72,22Z" fill="white" fillOpacity="0.5" strokeWidth="0"/>
-            <path d="M38,20 L33,30 L43,30Z" fill="white" fillOpacity="0.4" strokeWidth="0"/>
-            <line x1="10" y1="65" x2="90" y2="65" strokeWidth="1" strokeOpacity="0.4"/>
+        style={darkBg}>
+        <Side/><Side right/>
+        {/* Декоративный золотой круг */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <svg width="340" height="340" viewBox="0 0 340 340" fill="none">
+            <circle cx="170" cy="170" r="160" stroke={GOLD} strokeWidth="0.5" strokeOpacity="0.15"/>
+            <circle cx="170" cy="170" r="140" stroke={GOLD} strokeWidth="0.3" strokeOpacity="0.10"/>
+          </svg>
+        </div>
+
+        <div className="relative z-10 flex flex-col items-center gap-5">
+          {/* Горная иконка */}
+          <svg viewBox="0 0 110 80" width={130} height={94} fill="none">
+            <path d="M8,72 L38,24 L52,42 L70,8 L98,72Z"
+              fill={GOLD} fillOpacity="0.08" stroke={GOLD} strokeWidth="1.5" strokeOpacity="0.7" strokeLinejoin="round"/>
+            <path d="M70,8 L62,24 L78,24Z" fill={GOLD} fillOpacity="0.4" strokeWidth="0"/>
+            <path d="M38,24 L32,36 L44,36Z" fill={GOLD} fillOpacity="0.3" strokeWidth="0"/>
+            <line x1="8" y1="72" x2="98" y2="72" stroke={GOLD} strokeWidth="0.8" strokeOpacity="0.35"/>
           </svg>
 
-          <AltaiStar size={36}/>
+          <Star size={40}/>
 
           <div>
-            <p style={{fontSize:'clamp(1.5rem,7vw,2.4rem)', color:C, fontStyle:'italic', lineHeight:1.1}}>
+            <p style={{fontSize:'clamp(2rem,9vw,3rem)', color:CREAM,
+              fontStyle:'italic', lineHeight:1.1, textShadow:`0 0 20px ${GOLD}44`}}>
               «Туштажу»
             </p>
-            <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'clamp(0.9rem,4vw,1.2rem)', color:GOLD, letterSpacing:'0.1em', marginTop:4}}>
+            <p style={{fontFamily:"'Oswald',sans-serif",
+              fontSize:'clamp(0.85rem,4vw,1.1rem)', color:GOLD2,
+              letterSpacing:'0.12em', marginTop:6}}>
               кафе • Кош-Агач
             </p>
           </div>
 
-          <Branch/>
+          <Divider light/>
 
-          {/* Кнопка навигатора */}
-          <a
-            href="https://maps.yandex.ru/?text=Кош-Агач+кафе+Туштажу"
+          <a href="https://maps.yandex.ru/?text=Кош-Агач+кафе+Туштажу"
             target="_blank" rel="noreferrer"
-            onClick={e => e.stopPropagation()}
-            className="flex items-center gap-3 px-6 py-3 rounded-full"
+            onClick={e=>e.stopPropagation()}
             style={{
-              background:'hsl(28,38%,28%)',
-              color:'hsl(44,42%,92%)',
-              fontFamily:"'Oswald',sans-serif",
-              fontSize:'13px',
-              letterSpacing:'0.15em',
-              textDecoration:'none',
-              boxShadow:'0 4px 16px hsla(28,38%,20%,0.25)'
+              display:'flex', alignItems:'center', gap:10,
+              padding:'12px 28px', borderRadius:999,
+              border:`1px solid ${GOLD}`,
+              color:DARK, background:GOLD,
+              fontFamily:"'Oswald',sans-serif", fontSize:'12px',
+              letterSpacing:'0.18em', textDecoration:'none',
+              boxShadow:`0 4px 24px ${GOLD}44`
             }}>
-            <Icon name="Navigation" size={16}/>
-            ОТКРЫТЬ В НАВИГАТОРЕ
+            <Icon name="Navigation" size={15}/>
+            ОТКРЫТЬ НАВИГАТОР
           </a>
-
-          <p style={{fontFamily:"'Golos Text',sans-serif", fontSize:'11px', color:C, opacity:0.45, marginTop:4}}>
-            Нажми — откроется карта
-          </p>
         </div>
       </section>
 
-      {/* ═══ ЭКРАН 6: Финал / Долина ═══ */}
+      {/* ══════════════════════════════════════
+          СЛАЙД 6 — финал
+      ══════════════════════════════════════ */}
       <section className="relative w-full h-screen overflow-hidden flex items-center justify-center">
-        <img src={IMG_VALLEY} alt="" className="absolute inset-0 w-full h-full object-cover animate-pan"/>
-        <div className="absolute inset-0" style={{background:'hsla(28,25%,15%,0.45)'}}/>
-        <SideBorder/><SideBorder flip/>
+        <img src={IMG_VALLEY} alt=""
+             className="absolute inset-0 w-full h-full object-cover animate-pan"/>
+        <div className="absolute inset-0"
+             style={{background:'linear-gradient(to top,rgba(13,11,7,0.85),rgba(13,11,7,0.5))'}}/>
+        <Side/><Side right/>
 
-        <div className="relative z-10 flex flex-col items-center text-center px-12 gap-4">
-          <AltaiStar size={52}/>
-          <p style={{fontFamily:"'Cormorant',serif", fontSize:'clamp(1.6rem,7vw,2.8rem)', color:'hsl(44,42%,92%)', lineHeight:1.5}}>
+        <div className="relative z-10 flex flex-col items-center text-center px-12 gap-5">
+          <Star size={58}/>
+          <div style={{width:1, height:40, background:`linear-gradient(${GOLD},transparent)`, margin:'0 auto'}}/>
+          <p style={{fontSize:'clamp(1.8rem,8vw,3rem)', color:CREAM,
+            lineHeight:1.5, textShadow:`0 0 30px ${GOLD}55`}}>
             Слерди сакып турубыс
           </p>
-          <p style={{fontFamily:"'Golos Text',sans-serif", fontSize:'13px', color:'hsl(44,38%,88%)', opacity:0.7}}>
+          <p style={{fontFamily:"'Golos Text',sans-serif", fontSize:'13px',
+            color:CREAM, opacity:0.5, marginTop:-8}}>
             Мы ждём вас
           </p>
-          <Branch/>
-          <div className="flex items-center gap-3 mt-2">
-            <Icon name="Phone" size={18} style={{color:'hsl(44,38%,88%)'}}/>
-            <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'clamp(0.9rem,4vw,1.1rem)', color:'hsl(44,38%,88%)', letterSpacing:'0.1em'}}>
+          <Divider light/>
+          <div style={{display:'flex', alignItems:'center', gap:10}}>
+            <Icon name="Phone" size={16} style={{color:GOLD}}/>
+            <span style={{fontFamily:"'Oswald',sans-serif",
+              fontSize:'clamp(1rem,4.5vw,1.2rem)', color:CREAM, letterSpacing:'0.08em'}}>
               +7 (900) 000-00-00
-            </p>
+            </span>
           </div>
-          <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'10px', color:'hsl(44,35%,82%)', letterSpacing:'0.25em', opacity:0.65, marginTop:4}}>
+          <p style={{fontFamily:"'Oswald',sans-serif", fontSize:'10px',
+            color:GOLD2, letterSpacing:'0.28em', opacity:0.6, marginTop:4}}>
             АЭЛИТА &amp; ТУЗАГАШ • 14.08.2026
           </p>
         </div>
       </section>
-
     </div>
   );
-};
-
-export default Index;
+}
