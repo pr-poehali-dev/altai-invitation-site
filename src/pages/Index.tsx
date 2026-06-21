@@ -4,7 +4,7 @@ import Countdown from '@/components/Countdown';
 
 const IMG_BG     = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/3a740bed-d15c-41bd-9431-d4b0194b61e2.jpg';
 const IMG_COUPLE = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/47b96426-c610-4297-833d-dbbec2f22a11.jpg';
-const IMG_VALLEY = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/04be6736-f750-416e-8026-c3d5f8f53dfb.jpg';
+const IMG_VALLEY = 'https://cdn.poehali.dev/projects/7a68de8c-087c-4353-ab92-ee678b987004/files/7830eb8e-bcf1-4e78-ab94-1d20ffdea6c6.jpg';
 
 /* ── Цвета ── */
 const G  = 'hsl(28,40%,35%)';   /* основной коричневый */
