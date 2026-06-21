@@ -90,40 +90,39 @@ const Index = () => {
           className="fixed inset-0 z-50 cursor-pointer overflow-hidden flex flex-col"
           style={{ background: 'linear-gradient(180deg, hsl(46,45%,95%) 0%, hsl(42,38%,89%) 45%, hsl(38,32%,82%) 100%)' }}
         >
-          {/* ── Алтайские угловые орнаменты (плетёный бордюр) ── */}
-          {(['tl','tr','bl','br'] as const).map(pos => (
-            <svg key={pos} viewBox="0 0 120 120"
-              className={`absolute w-32 h-32 text-[hsl(28,38%,32%)]
-                ${pos==='tl' ? 'top-0 left-0' : ''}
-                ${pos==='tr' ? 'top-0 right-0 scale-x-[-1]' : ''}
-                ${pos==='bl' ? 'bottom-0 left-0 scale-y-[-1]' : ''}
-                ${pos==='br' ? 'bottom-0 right-0 scale-[-1]' : ''}`}
-              fill="none" stroke="currentColor">
-              {/* Внешняя рамка */}
-              <path d="M2,2 L60,2 L60,6 L6,6 L6,60 L2,60 Z" strokeWidth="0" fill="currentColor" fillOpacity="0.55"/>
-              {/* Тройная линия угла */}
-              <path d="M10,10 L55,10" strokeWidth="1" strokeOpacity="0.4"/>
-              <path d="M10,10 L10,55" strokeWidth="1" strokeOpacity="0.4"/>
-              <path d="M14,14 L50,14" strokeWidth="0.7" strokeOpacity="0.3"/>
-              <path d="M14,14 L14,50" strokeWidth="0.7" strokeOpacity="0.3"/>
-              {/* Ромбы по бордюру */}
-              <path d="M20,2 L24,6 L20,10 L16,6 Z" fill="currentColor" fillOpacity="0.6" strokeWidth="0"/>
-              <path d="M34,2 L38,6 L34,10 L30,6 Z" fill="currentColor" fillOpacity="0.45" strokeWidth="0"/>
-              <path d="M48,2 L52,6 L48,10 L44,6 Z" fill="currentColor" fillOpacity="0.3" strokeWidth="0"/>
-              <path d="M2,20 L6,24 L10,20 L6,16 Z" fill="currentColor" fillOpacity="0.6" strokeWidth="0"/>
-              <path d="M2,34 L6,38 L10,34 L6,30 Z" fill="currentColor" fillOpacity="0.45" strokeWidth="0"/>
-              <path d="M2,48 L6,52 L10,48 L6,44 Z" fill="currentColor" fillOpacity="0.3" strokeWidth="0"/>
-              {/* Центральный алтайский крест-узел */}
-              <path d="M28,28 L36,20 L44,28 L36,36 Z" fill="currentColor" fillOpacity="0.2" strokeWidth="0"/>
-              <path d="M32,24 L36,20 L40,24 L36,28 Z" fill="currentColor" fillOpacity="0.45" strokeWidth="0"/>
-              <path d="M28,28 L32,32 L28,36 L24,32 Z" fill="currentColor" fillOpacity="0.25" strokeWidth="0"/>
-              <path d="M36,36 L40,32 L44,36 L40,40 Z" fill="currentColor" fillOpacity="0.25" strokeWidth="0"/>
-              <circle cx="36" cy="28" r="2.5" fill="currentColor" fillOpacity="0.5" strokeWidth="0"/>
-              {/* Мелкие квадратики-плетение */}
-              <rect x="16" y="22" width="5" height="5" transform="rotate(45 18.5 24.5)" fill="currentColor" fillOpacity="0.15" strokeWidth="0"/>
-              <rect x="22" y="16" width="5" height="5" transform="rotate(45 24.5 18.5)" fill="currentColor" fillOpacity="0.15" strokeWidth="0"/>
-            </svg>
-          ))}
+          {/* ── Боковые орнаментальные полосы на весь экран ── */}
+          {/* Левая полоса */}
+          <svg viewBox="0 0 40 800" className="absolute top-0 left-0 h-full w-10 text-[hsl(28,38%,30%)]"
+               preserveAspectRatio="none" fill="currentColor">
+            {/* фон полосы */}
+            <rect x="0" y="0" width="40" height="800" fillOpacity="0.10"/>
+            {/* внешняя линия */}
+            <rect x="0" y="0" width="3" height="800" fillOpacity="0.5"/>
+            {/* внутренняя линия */}
+            <rect x="6" y="0" width="1" height="800" fillOpacity="0.25"/>
+            {/* повторяющийся блок ромбов 40px */}
+            {Array.from({length: 20}).map((_,i) => (
+              <g key={i} transform={`translate(0, ${i*40})`}>
+                <path d="M20,4 L28,12 L20,20 L12,12 Z" fillOpacity="0.55"/>
+                <path d="M20,20 L26,26 L20,32 L14,26 Z" fillOpacity="0.3"/>
+                <rect x="15" y="23" width="10" height="10" rx="1" fillOpacity="0.08"/>
+              </g>
+            ))}
+          </svg>
+          {/* Правая полоса (зеркало) */}
+          <svg viewBox="0 0 40 800" className="absolute top-0 right-0 h-full w-10 text-[hsl(28,38%,30%)] scale-x-[-1]"
+               preserveAspectRatio="none" fill="currentColor">
+            <rect x="0" y="0" width="40" height="800" fillOpacity="0.10"/>
+            <rect x="0" y="0" width="3" height="800" fillOpacity="0.5"/>
+            <rect x="6" y="0" width="1" height="800" fillOpacity="0.25"/>
+            {Array.from({length: 20}).map((_,i) => (
+              <g key={i} transform={`translate(0, ${i*40})`}>
+                <path d="M20,4 L28,12 L20,20 L12,12 Z" fillOpacity="0.55"/>
+                <path d="M20,20 L26,26 L20,32 L14,26 Z" fillOpacity="0.3"/>
+                <rect x="15" y="23" width="10" height="10" rx="1" fillOpacity="0.08"/>
+              </g>
+            ))}
+          </svg>
 
           {/* ── Контент ── */}
           <div className="relative z-10 flex flex-col items-center justify-between h-full py-10 px-6 text-center">
