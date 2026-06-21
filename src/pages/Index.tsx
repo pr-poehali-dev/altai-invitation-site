@@ -245,30 +245,11 @@ export default function Index() {
       </section>
 
       {/* ══ СЛАЙД 3: Пара ══ */}
-      <section className="relative w-full h-screen overflow-hidden flex items-end justify-center">
+      <section className="relative w-full h-screen overflow-hidden">
         <img src={IMG_COUPLE} alt=""
-             className="absolute inset-0 w-full h-full object-cover"
-             style={{objectPosition:'center top'}}/>
-        {/* Плавный переход сверху — растворяется в кремовый */}
-        <div className="absolute top-0 left-0 right-0 h-32"
-             style={{background:'linear-gradient(to bottom, hsl(40,50%,96%) 0%, transparent 100%)'}}/>
-        {/* Плавный переход снизу */}
-        <div className="absolute bottom-0 left-0 right-0"
-             style={{height:'52%', background:'linear-gradient(to top, hsl(40,50%,96%) 0%, hsl(40,50%,96%) 18%, rgba(245,240,230,0.82) 50%, transparent 100%)'}}/>
+             className="absolute inset-0 w-full h-full"
+             style={{objectFit:'contain', objectPosition:'center center', background:'hsl(40,50%,96%)'}}/>
         <Side/><Side flip/>
-        <div className="relative z-10 text-center pb-14 px-10 w-full flex flex-col items-center">
-          <Medallion size={42}/>
-          <Sep/>
-          <h2 style={{
-            fontSize:'clamp(2.6rem,12vw,4.5rem)',
-            color:G,
-            lineHeight:1.0,
-          }}>
-            Аэлита<br/>
-            <span style={{color:G2, fontStyle:'italic', fontSize:'0.72em'}}>&amp;</span><br/>
-            Тузагаш
-          </h2>
-        </div>
       </section>
 
       {/* ══ СЛАЙД 4: Дата + отсчёт ══ */}
