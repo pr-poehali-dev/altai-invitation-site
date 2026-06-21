@@ -254,9 +254,7 @@ export default function Index() {
               color:G,
               opacity:0.45,
               letterSpacing:'0.12em',
-            }}>
-              Начало нового очага
-            </p>
+            }}></p>
           </div>
         </div>
       </section>
