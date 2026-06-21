@@ -4,11 +4,13 @@
 
 @layer base {
   :root {
-    --background: 38 30% 96%;
-    --foreground: 200 50% 12%;
-    --gold: 38 78% 52%;
+    --background: 40 30% 92%;
+    --foreground: 30 25% 22%;
+    --gold: 36 45% 45%;
     --teal: 186 64% 38%;
-    --deep: 200 55% 14%;
+    --deep: 30 28% 18%;
+    --parch: 42 38% 90%;
+    --parch-dark: 38 32% 82%;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -138,6 +140,41 @@
       hsl(var(--gold)),
       transparent
     );
+  }
+
+  .parchment {
+    background-color: hsl(var(--parch));
+    background-image:
+      radial-gradient(
+        ellipse at 30% 20%,
+        hsla(36, 45%, 70%, 0.18),
+        transparent 55%
+      ),
+      radial-gradient(
+        ellipse at 80% 90%,
+        hsla(30, 35%, 55%, 0.14),
+        transparent 50%
+      );
+  }
+
+  .frame-gold {
+    box-shadow:
+      0 0 0 1px hsla(36, 45%, 45%, 0.5) inset,
+      0 0 0 6px hsl(var(--parch)) inset,
+      0 0 0 7px hsla(36, 45%, 45%, 0.35) inset;
+  }
+
+  @keyframes slow-pan {
+    0%,
+    100% {
+      transform: scale(1.05) translateY(0);
+    }
+    50% {
+      transform: scale(1.12) translateY(-2%);
+    }
+  }
+  .animate-pan {
+    animation: slow-pan 22s ease-in-out infinite;
   }
 
   @keyframes float-slow {
