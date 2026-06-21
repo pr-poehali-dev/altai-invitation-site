@@ -83,50 +83,25 @@ const Index = () => {
     <div style={{ fontFamily: "'Cormorant', serif" }}
          className="bg-[hsl(var(--parch))] text-[hsl(var(--deep))]">
 
-      {/* ══ СЛАЙД 1: Стартовый (клик, чтобы открыть) ══ */}
+      {/* ══ СЛАЙД 1: Стартовый ══ */}
       {!opened && (
         <section
           onClick={() => setOpened(true)}
           className="fixed inset-0 z-50 cursor-pointer overflow-hidden"
         >
-          {/* Фон — точно эскиз слайда 1 */}
           <img
             src={IMG_SLIDE1}
             alt=""
-            className="absolute inset-0 w-full h-full object-cover object-center"
+            className="absolute inset-0 w-full h-full object-contain object-center"
+            style={{ background: 'hsl(42,35%,90%)' }}
           />
-          {/* Лёгкий оверлей чтобы текст читался */}
-          <div className="absolute inset-0 bg-[hsl(42,38%,92%)]/20" />
-
-          {/* Текст поверх — имена по центру, подпись снизу */}
-          <div className="relative z-10 h-full flex flex-col items-center justify-between py-[12%] px-6 text-center">
-            {/* Пустой верх — там птицы и узор уже на картинке */}
-            <div />
-
-            {/* Имена */}
-            <div className="flex flex-col items-center">
-              <h1 className="text-6xl sm:text-7xl leading-[1.1] text-[hsl(30,28%,20%)] reveal"
-                  style={{ fontFamily: "'Cormorant', serif", animationDelay: '0.1s' }}>
-                Аэлита
-              </h1>
-              <span className="text-4xl text-[hsl(36,42%,42%)] italic my-0.5 block reveal"
-                    style={{ fontFamily: "'Cormorant', serif", animationDelay: '0.2s' }}>
-                &amp;
-              </span>
-              <h1 className="text-6xl sm:text-7xl leading-[1.1] text-[hsl(30,28%,20%)] reveal"
-                  style={{ fontFamily: "'Cormorant', serif", animationDelay: '0.3s' }}>
-                Тузагаш
-              </h1>
-            </div>
-
-            {/* Подпись внизу — на картинке уже есть горный значок */}
-            <div className="flex flex-col items-center gap-1 animate-float">
-              <p className="text-[11px] uppercase tracking-widest text-[hsl(30,25%,28%)]/80"
-                 style={{ fontFamily: "'Oswald', sans-serif" }}>
-                Экранга тийип ачыгар
-              </p>
-              <Icon name="ChevronDown" size={18} className="text-[hsl(36,42%,42%)]" />
-            </div>
+          {/* Только подпись снизу */}
+          <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-1 animate-float z-10">
+            <p className="text-[11px] uppercase tracking-widest text-[hsl(30,25%,28%)]/70"
+               style={{ fontFamily: "'Oswald', sans-serif" }}>
+              Экранга тийип ачыгар
+            </p>
+            <Icon name="ChevronDown" size={18} className="text-[hsl(36,42%,42%)]" />
           </div>
         </section>
       )}
